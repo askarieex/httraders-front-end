@@ -1,0 +1,2199 @@
+/****************************************************
+  Customers.css - Modern and Professional UI
+****************************************************/
+
+/* ============ COLOR VARIABLES ============ */
+:root {
+  --color-primary: #28a745;
+  --color-primary-hover: #218838;
+  --color-secondary: #17a2b8;
+  --color-secondary-hover: #138496;
+  --color-warning: #ffc107;
+  --color-warning-hover: #e0a800;
+  --color-danger: #dc3545;
+  --color-danger-hover: #c82333;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --text-dark: #343a40;
+  --text-muted: #868e96;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-family: 'Roboto', sans-serif;
+  --font-size-base: 0.75rem; /* Consistent with Sidebar */
+  --font-size-small: 0.65rem; /* Consistent with Sidebar */
+  --transition-speed: 0.3s;
+}
+
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: var(--font-size-base);
+}
+
+/* PAGE WRAPPER */
+.ledgers-page-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+}
+
+.ledgers-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ledgers-content {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: var(--bg-light);
+  overflow-y: auto;
+}
+
+/* SUMMARY CARDS */
+.summary-cards {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.summary-card {
+  background-color: var(--bg-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.summary-card p {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+/* HEADER ACTIONS */
+.top-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  margin: 0;
+  font-weight: 600;
+}
+
+.btn-add-new {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-add-new:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-add-new:active {
+  transform: translateY(0);
+}
+
+/* SINGLE SEARCH SECTION */
+.single-search-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.single-search-section label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  min-width: 120px;
+}
+
+.single-search-section input[type="text"] {
+  flex: 1;
+  max-width: 400px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.single-search-section input[type="text"]:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+/* HIGHLIGHT ROW */
+.highlight-row {
+  background-color: #fff8d2;
+}
+
+/* LEDGER TABLE SECTION */
+.ledger-table-section {
+  background-color: var(--bg-white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.ledger-table-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* RESPONSIVE TABLE WRAPPER */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+/* TABLE */
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: #212529;
+  background-color: var(--bg-white);
+  border-radius: 6px;
+  overflow: hidden;
+  min-width: 800px;
+}
+
+.ledger-table thead {
+  background-color: #f2f2f2;
+}
+
+.ledger-table th,
+.ledger-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ledger-table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: #495057;
+  letter-spacing: 0.5px;
+}
+
+.ledger-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.ledger-table tbody tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+/* ACTION BUTTONS ALIGNMENT */
+.actions-cell {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-view,
+.btn-edit,
+.btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.btn-view {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+.btn-view:hover {
+  background-color: var(--color-secondary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-edit {
+  background-color: var(--color-warning);
+  color: #212529;
+}
+
+.btn-edit:hover {
+  background-color: var(--color-warning-hover);
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: var(--color-danger-hover);
+  transform: translateY(-2px);
+}
+
+/* TEXT ALIGNMENT CLASSES */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(52, 58, 64, 0.6); /* Semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-container {
+  background-color: #fff;
+  width: 450px;
+  max-width: 95%;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  margin-bottom: 1.2rem;
+  color: var(--text-dark);
+  text-align: center;
+  font-weight: 600;
+}
+
+.modal-form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.modal-form-field label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 5px;
+}
+
+.modal-form-field input,
+.modal-form-field textarea {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #495057;
+  outline: none;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.modal-form-field input:focus,
+.modal-form-field textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.btn-cancel,
+.btn-confirm {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.btn-cancel {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.btn-confirm {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.btn-confirm:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .summary-cards {
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+    min-width: 120px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .btn-add-new {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section {
+    gap: 0.8rem;
+  }
+
+  .single-search-section label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 350px;
+    font-size: 0.9rem;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 600px;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-cards {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+    min-width: 100px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .btn-add-new {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-search-section label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ledger-table-section {
+    padding: 0.8rem;
+  }
+
+  .ledger-table {
+    min-width: 500px;
+  }
+
+  .modal-container {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* RECENT INVOICES STYLES */
+.recent-invoices {
+  margin-top: 1.5rem;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices h2 {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recent-invoices table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices th,
+.recent-invoices td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.recent-invoices th {
+  background-color: #f5f5f5;
+}
+
+.recent-invoices tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========================================= */
+/*   BEAUTIFUL STYLING FOR PAYMENT & AMOUNT  */
+/* ========================================= */
+
+/* Wrapper around the Payment Method select (icon + select) */
+.payment-method-container .dropdown-with-icon,
+.received-amount-container .input-with-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Position the icons */
+.payment-method-icon,
+.rupee-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Make Payment Method dropdown bigger & more stylish */
+.payment-method-select {
+  padding-left: 2.2rem !important;
+  padding-right: 1.2rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ccc 50%), 
+      linear-gradient(45deg, #ccc 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(1.2em), calc(100% - 9px) calc(1.2em);
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.payment-method-select:hover,
+.payment-method-select:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+/* Make Received Amount input bigger & more stylish */
+.received-amount-input {
+  padding-left: 2.2rem !important;
+  padding-right: 0.8rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.received-amount-input:hover,
+.received-amount-input:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  padding-right: 0.6rem;
+}
+
+.input-with-button input[type="number"] {
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 140px !important;
+  padding: 0.3rem;
+  font-size: 0.75rem;
+}
+
+/* Additional Enhancements */
+
+/* Button Icons (Optional) */
+.btn-add-new::before {
+  content: "➕";
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-size: 1rem;
+}
+
+/* Table Hover Effect */
+.ledger-table tbody tr:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+/* Badge Enhancements */
+.badge {
+  margin-left: auto;
+  background: #ff5e5e;
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Typography */
+@media (max-width: 1024px) {
+  .summary-cards {
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+    min-width: 120px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .btn-add-new {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section {
+    gap: 0.8rem;
+  }
+
+  .single-search-section label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 350px;
+    font-size: 0.9rem;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 600px;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-cards {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+    min-width: 100px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .btn-add-new {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-search-section label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ledger-table-section {
+    padding: 0.8rem;
+  }
+
+  .ledger-table {
+    min-width: 500px;
+  }
+
+  .modal-container {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* RECENT INVOICES STYLES */
+.recent-invoices {
+  margin-top: 1.5rem;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices h2 {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recent-invoices table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices th,
+.recent-invoices td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.recent-invoices th {
+  background-color: #f5f5f5;
+}
+
+.recent-invoices tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========================================= */
+/*   BEAUTIFUL STYLING FOR PAYMENT & AMOUNT  */
+/* ========================================= */
+
+/* Wrapper around the Payment Method select (icon + select) */
+.payment-method-container .dropdown-with-icon,
+.received-amount-container .input-with-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Position the icons */
+.payment-method-icon,
+.rupee-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Make Payment Method dropdown bigger & more stylish */
+.payment-method-select {
+  padding-left: 2.2rem !important;
+  padding-right: 1.2rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ccc 50%), 
+      linear-gradient(45deg, #ccc 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(1.2em), calc(100% - 9px) calc(1.2em);
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.payment-method-select:hover,
+.payment-method-select:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+/* Make Received Amount input bigger & more stylish */
+.received-amount-input {
+  padding-left: 2.2rem !important;
+  padding-right: 0.8rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.received-amount-input:hover,
+.received-amount-input:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  padding-right: 0.6rem;
+}
+
+.input-with-button input[type="number"] {
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 140px !important;
+  padding: 0.3rem;
+  font-size: 0.75rem;
+}
+
+/* Additional Enhancements */
+
+/* Button Icons (Optional) */
+.btn-add-new::before {
+  content: "➕";
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-size: 1rem;
+}
+
+/* Table Hover Effect */
+.ledger-table tbody tr:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+/* Badge Enhancements */
+.badge {
+  margin-left: auto;
+  background: #ff5e5e;
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Typography */
+@media (max-width: 1024px) {
+  .summary-cards {
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+    min-width: 120px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .btn-add-new {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section {
+    gap: 0.8rem;
+  }
+
+  .single-search-section label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 350px;
+    font-size: 0.9rem;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 600px;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-cards {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+    min-width: 100px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .btn-add-new {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-search-section label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ledger-table-section {
+    padding: 0.8rem;
+  }
+
+  .ledger-table {
+    min-width: 500px;
+  }
+
+  .modal-container {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* RECENT INVOICES STYLES */
+.recent-invoices {
+  margin-top: 1.5rem;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices h2 {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recent-invoices table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices th,
+.recent-invoices td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.recent-invoices th {
+  background-color: #f5f5f5;
+}
+
+.recent-invoices tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========================================= */
+/*   BEAUTIFUL STYLING FOR PAYMENT & AMOUNT  */
+/* ========================================= */
+
+/* Wrapper around the Payment Method select (icon + select) */
+.payment-method-container .dropdown-with-icon,
+.received-amount-container .input-with-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Position the icons */
+.payment-method-icon,
+.rupee-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Make Payment Method dropdown bigger & more stylish */
+.payment-method-select {
+  padding-left: 2.2rem !important;
+  padding-right: 1.2rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ccc 50%), 
+      linear-gradient(45deg, #ccc 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(1.2em), calc(100% - 9px) calc(1.2em);
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.payment-method-select:hover,
+.payment-method-select:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+/* Make Received Amount input bigger & more stylish */
+.received-amount-input {
+  padding-left: 2.2rem !important;
+  padding-right: 0.8rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.received-amount-input:hover,
+.received-amount-input:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  padding-right: 0.6rem;
+}
+
+.input-with-button input[type="number"] {
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 140px !important;
+  padding: 0.3rem;
+  font-size: 0.75rem;
+}
+
+/* Additional Enhancements */
+
+/* Button Icons (Optional) */
+.btn-add-new::before {
+  content: "➕";
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-size: 1rem;
+}
+
+/* Table Hover Effect */
+.ledger-table tbody tr:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+/* Badge Enhancements */
+.badge {
+  margin-left: auto;
+  background: #ff5e5e;
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Typography */
+@media (max-width: 1024px) {
+  .summary-cards {
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+    min-width: 120px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .btn-add-new {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section {
+    gap: 0.8rem;
+  }
+
+  .single-search-section label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 350px;
+    font-size: 0.9rem;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 600px;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-cards {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+    min-width: 100px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .btn-add-new {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-search-section label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ledger-table-section {
+    padding: 0.8rem;
+  }
+
+  .ledger-table {
+    min-width: 500px;
+  }
+
+  .modal-container {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* RECENT INVOICES STYLES */
+.recent-invoices {
+  margin-top: 1.5rem;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices h2 {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recent-invoices table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices th,
+.recent-invoices td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.recent-invoices th {
+  background-color: #f5f5f5;
+}
+
+.recent-invoices tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========================================= */
+/*   BEAUTIFUL STYLING FOR PAYMENT & AMOUNT  */
+/* ========================================= */
+
+/* Wrapper around the Payment Method select (icon + select) */
+.payment-method-container .dropdown-with-icon,
+.received-amount-container .input-with-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Position the icons */
+.payment-method-icon,
+.rupee-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Make Payment Method dropdown bigger & more stylish */
+.payment-method-select {
+  padding-left: 2.2rem !important;
+  padding-right: 1.2rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ccc 50%), 
+      linear-gradient(45deg, #ccc 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(1.2em), calc(100% - 9px) calc(1.2em);
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.payment-method-select:hover,
+.payment-method-select:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+/* Make Received Amount input bigger & more stylish */
+.received-amount-input {
+  padding-left: 2.2rem !important;
+  padding-right: 0.8rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.received-amount-input:hover,
+.received-amount-input:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  padding-right: 0.6rem;
+}
+
+.input-with-button input[type="number"] {
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 140px !important;
+  padding: 0.3rem;
+  font-size: 0.75rem;
+}
+
+/* Additional Enhancements */
+
+/* Button Icons (Optional) */
+.btn-add-new::before {
+  content: "➕";
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-size: 1rem;
+}
+
+/* Table Hover Effect */
+.ledger-table tbody tr:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+/* Badge Enhancements */
+.badge {
+  margin-left: auto;
+  background: #ff5e5e;
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Typography */
+@media (max-width: 1024px) {
+  .summary-cards {
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+    min-width: 120px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .btn-add-new {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section {
+    gap: 0.8rem;
+  }
+
+  .single-search-section label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 350px;
+    font-size: 0.9rem;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 600px;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-cards {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+    min-width: 100px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .btn-add-new {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-search-section label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ledger-table-section {
+    padding: 0.8rem;
+  }
+
+  .ledger-table {
+    min-width: 500px;
+  }
+
+  .modal-container {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* RECENT INVOICES STYLES */
+.recent-invoices {
+  margin-top: 1.5rem;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices h2 {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recent-invoices table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.recent-invoices th,
+.recent-invoices td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.recent-invoices th {
+  background-color: #f5f5f5;
+}
+
+.recent-invoices tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========================================= */
+/*   BEAUTIFUL STYLING FOR PAYMENT & AMOUNT  */
+/* ========================================= */
+
+/* Wrapper around the Payment Method select (icon + select) */
+.payment-method-container .dropdown-with-icon,
+.received-amount-container .input-with-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Position the icons */
+.payment-method-icon,
+.rupee-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Make Payment Method dropdown bigger & more stylish */
+.payment-method-select {
+  padding-left: 2.2rem !important;
+  padding-right: 1.2rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #ccc 50%), 
+      linear-gradient(45deg, #ccc 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(1.2em), calc(100% - 9px) calc(1.2em);
+  background-size: 4px 4px;
+  background-repeat: no-repeat;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.payment-method-select:hover,
+.payment-method-select:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+/* Make Received Amount input bigger & more stylish */
+.received-amount-input {
+  padding-left: 2.2rem !important;
+  padding-right: 0.8rem !important;
+  font-size: 0.85rem !important;
+  height: 40px !important;
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 180px !important;
+}
+
+.received-amount-input:hover,
+.received-amount-input:focus {
+  border-color: var(--color-primary-hover) !important;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  align-items: center;
+  padding-right: 0.6rem;
+}
+
+.input-with-button input[type="number"] {
+  border: 2px solid var(--color-primary) !important;
+  border-radius: 8px !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  outline: none !important;
+  transition: border-color 0.3s ease;
+  width: 140px !important;
+  padding: 0.3rem;
+  font-size: 0.75rem;
+}
+
+/* Additional Enhancements */
+
+/* Button Icons (Optional) */
+.btn-add-new::before {
+  content: "➕";
+  display: inline-block;
+  margin-right: 0.3rem;
+  font-size: 1rem;
+}
+
+/* Table Hover Effect */
+.ledger-table tbody tr:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+/* Badge Enhancements */
+.badge {
+  margin-left: auto;
+  background: #ff5e5e;
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Typography */
+@media (max-width: 1024px) {
+  .summary-cards {
+    gap: 0.8rem;
+  }
+
+  .summary-card {
+    padding: 0.8rem;
+    min-width: 120px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .btn-add-new {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section {
+    gap: 0.8rem;
+  }
+
+  .single-search-section label {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 350px;
+    font-size: 0.9rem;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .ledger-table-section {
+    padding: 1rem;
+  }
+
+  .ledger-table {
+    min-width: 600px;
+  }
+
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-cards {
+    gap: 0.6rem;
+  }
+
+  .summary-card {
+    padding: 0.6rem;
+    min-width: 100px;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+  }
+
+  .btn-add-new {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .single-search-section label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .single-search-section input[type="text"] {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .ledger-table-section {
+    padding: 0.8rem;
+  }
+
+  .ledger-table {
+    min-width: 500px;
+  }
+
+  .modal-container {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-form-field input,
+  .modal-form-field textarea {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .btn-cancel,
+  .btn-confirm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .ledger-table th,
+  .ledger-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

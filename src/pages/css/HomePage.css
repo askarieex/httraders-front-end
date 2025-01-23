@@ -1,0 +1,207 @@
+/* HomePage.css */
+
+/* ======= GLOBAL STYLE (Optional) ======= */
+
+
+/* The container for your entire dashboard page: sidebar + main content */
+.home-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f5f9; 
+}
+
+/* The main content area (right side if sidebar is on the left) */
+.home-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* The content area for your actual dashboard cards, tables, etc. */
+.home-content {
+  padding: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto; /* center if needed */
+}
+
+/* Dashboard Title */
+.dashboard-title {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: #222; /* Darker text for good contrast */
+  letter-spacing: 0.5px;
+}
+
+/* ======= SUMMARY CARDS ======= */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* 
+  Each card has a bold gradient background, 
+  big text, and high contrast for readability. 
+*/
+.summary-card {
+  background: #e7e7e700; 
+  /* Light-to-bold teal/cyan gradient. You can pick any colors you like. */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  color: #fff; /* white text for contrast */
+  text-align: left;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 18px rgba(0,0,0,0.2);
+}
+
+/* Title inside the card: uppercase, slightly smaller for a label style */
+.summary-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* The main value displayed on the card, large and bold for emphasis */
+.summary-card p {
+  margin: 0;
+  font-size: 2rem; 
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* For optional decorative shapes or icons, you can do something like:
+.summary-card::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  z-index: 0;
+}
+*/
+
+/* ======= DASHBOARD ROWS AND PANELS ======= */
+.dashboard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem; /* more spacing for a bolder design */
+  margin-bottom: 2rem;
+}
+
+.dashboard-panel {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.dashboard-panel:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.14);
+}
+
+/* Panel Title */
+.dashboard-panel h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: 0.4px;
+}
+
+/* Chart panel height */
+.chart-panel {
+  min-height: 400px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* === TABLES INSIDE PANELS === */
+.dashboard-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.dashboard-panel table thead tr {
+  background-color: #e2e8f0; /* light gray-blue */
+}
+
+.dashboard-panel table th,
+.dashboard-panel table td {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #444;
+}
+
+/* Striped effect */
+.dashboard-panel table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Hover highlight */
+.dashboard-panel table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* If table is empty */
+.dashboard-panel table td[colspan] {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+}
+
+/* Headings for special sections to differentiate them: */
+.low-stock-panel h2 {
+  color: #d84315; /* or use a bright red/orange for emphasis */
+}
+.new-stock-panel h2 {
+  color: #00796B; /* teal color */
+}
+
+/* === LOADING & ERROR === */
+.home-page-loading,
+.home-page-error {
+  display: flex;
+  width: 100%;
+}
+
+.loading-message,
+.error-message {
+  margin: auto; 
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+  text-align: center;
+}
+
+/* === MEDIA QUERIES === */
+@media (max-width: 768px) {
+  /* Stack columns on small screens */
+  .dashboard-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

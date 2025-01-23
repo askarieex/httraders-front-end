@@ -1,0 +1,48 @@
+/* src/components/TopNavbar.css */
+
+.topnav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    background: #fff;
+  }
+  
+  .welcome-section {
+    font-size: 0.95rem;
+    color: #666;
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .welcome-section strong {
+    color: #333;
+  }
+  
+  .searchbar-section input {
+    width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+  }
+  
+  .topnav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .notif-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+  .profile-avatar img {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+  }
+  
