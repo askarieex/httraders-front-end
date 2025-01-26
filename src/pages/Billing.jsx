@@ -1,22 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Sidebar from '../components/Sidebar';
-import './css/Billing.css'; // Ensure this is the updated CSS file below
-import Select from 'react-select';
-import CustomOption from '../components/CustomOption';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import { 
-  FaTrash, 
-  FaPlus, 
-  FaMinus, 
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Sidebar from "../components/Sidebar";
+import "./css/Billing.css"; // Ensure this is the updated CSS file below
+import Select from "react-select";
+import CustomOption from "../components/CustomOption";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import {
+  FaTrash,
+  FaPlus,
+  FaMinus,
   FaSave,
-  // Added these two icons for your styling
   FaMoneyCheckAlt,
-  FaRupeeSign
-} from 'react-icons/fa';
-import logo from '../assets/logo.png';
+  FaRupeeSign,
+} from "react-icons/fa";
+import logo from "../assets/logo.png";
 
 function Billing() {
   // State Management
@@ -28,23 +27,33 @@ function Billing() {
 
   // We add two new fields: paymentMethod & receivedAmount
   const [invoiceData, setInvoiceData] = useState({
-    invoiceDate: '',
-    dueDate: '',
-    poNumber: '',
-    to: { name: '', address: '', email: '', phone: '' },
+    invoiceDate: "",
+    dueDate: "",
+    poNumber: "",
+    to: { name: "", address: "", email: "", phone: "" },
     items: [
-      { item_id: '', name: '', dimension: '', category: '', selling_price: 0, unit: '', quantity: 1, subtotal: 0 }
+      {
+        item_id: "",
+        name: "",
+        dimension: "",
+        category: "",
+        selling_price: 0,
+        unit: "",
+        quantity: 1,
+        subtotal: 0,
+      },
     ],
     discount: 0,
     tax: 0,
-    taxType: 'GST',
-    currency: '₹',
-    notes: '',
-    paymentTerms: '',
+    taxType: "GST",
+    currency: "₹",
+    notes: "",
+    paymentTerms: "",
 
     // New fields
-    paymentMethod: '',  // e.g. 'Cash', 'Bank', 'Cheque', 'UPI', 'Net Banking'
-    receivedAmount: ''  // numeric input from user
+    paymentMethod: "", // e.g. 'Cash', 'Bank', 'Cheque', 'UPI', 'Net Banking'
+    receivedAmount: "", // numeric input from user
+    invoicePendingAmount: 0, // New field to store pending amount
   });
 
   const [alerts, setAlerts] = useState([]);
@@ -60,9 +69,9 @@ function Billing() {
   // Alerts
   const addAlert = (type, message) => {
     const id = Date.now();
-    setAlerts(prev => [...prev, { id, type, message }]);
+    setAlerts((prev) => [...prev, { id, type, message }]);
     setTimeout(() => {
-      setAlerts(prev => prev.filter(alert => alert.id !== id));
+      setAlerts((prev) => prev.filter((alert) => alert.id !== id));
     }, 5000);
   };
 
@@ -70,13 +79,16 @@ function Billing() {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/customers', {
-          headers: getAuthHeader(),
-        });
+        const response = await axios.get(
+          "http://localhost:3000/api/customers",
+          {
+            headers: getAuthHeader(),
+          }
+        );
         setCustomers(response.data);
       } catch (error) {
-        console.error('Error fetching customers:', error);
-        addAlert('danger', 'Failed to fetch customers.');
+        console.error("Error fetching customers:", error);
+        addAlert("danger", "Failed to fetch customers.");
       }
     };
     fetchCustomers();
@@ -86,13 +98,13 @@ function Billing() {
   useEffect(() => {
     const fetchStockItems = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/items', {
+        const response = await axios.get("http://localhost:3000/api/items", {
           headers: getAuthHeader(),
         });
         setItemsStock(response.data);
       } catch (error) {
-        console.error('Error fetching stock items:', error);
-        addAlert('danger', 'Failed to fetch stock items.');
+        console.error("Error fetching stock items:", error);
+        addAlert("danger", "Failed to fetch stock items.");
       }
     };
     fetchStockItems();
@@ -102,13 +114,16 @@ function Billing() {
   useEffect(() => {
     const fetchLatestInvoiceNumber = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/invoices/latest', {
-          headers: getAuthHeader(),
-        });
+        const response = await axios.get(
+          "http://localhost:3000/api/invoices/latest",
+          {
+            headers: getAuthHeader(),
+          }
+        );
         setLatestInvoiceNumber(response.data.invoiceNumber);
       } catch (error) {
-        console.error('Error fetching latest invoice number:', error);
-        addAlert('danger', 'Failed to fetch latest invoice number.');
+        console.error("Error fetching latest invoice number:", error);
+        addAlert("danger", "Failed to fetch latest invoice number.");
       }
     };
     fetchLatestInvoiceNumber();
@@ -117,8 +132,8 @@ function Billing() {
   // Default invoice date = today
   useEffect(() => {
     if (!invoiceData.invoiceDate) {
-      const today = new Date().toISOString().split('T')[0];
-      setInvoiceData(prev => ({ ...prev, invoiceDate: today }));
+      const today = new Date().toISOString().split("T")[0];
+      setInvoiceData((prev) => ({ ...prev, invoiceDate: today }));
     }
   }, [invoiceData.invoiceDate]);
 
@@ -127,8 +142,8 @@ function Billing() {
     if (invoiceData.invoiceDate) {
       const date = new Date(invoiceData.invoiceDate);
       date.setDate(date.getDate() + 10);
-      const due = date.toISOString().split('T')[0];
-      setInvoiceData(prev => ({ ...prev, dueDate: due }));
+      const due = date.toISOString().split("T")[0];
+      setInvoiceData((prev) => ({ ...prev, dueDate: due }));
     }
   }, [invoiceData.invoiceDate]);
 
@@ -136,13 +151,16 @@ function Billing() {
   useEffect(() => {
     const fetchRecentInvoices = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/invoices?limit=20', {
-          headers: getAuthHeader(),
-        });
+        const response = await axios.get(
+          "http://localhost:3000/api/invoices?limit=20",
+          {
+            headers: getAuthHeader(),
+          }
+        );
         setRecentInvoices(response.data);
       } catch (error) {
-        console.error('Error fetching recent invoices:', error);
-        addAlert('danger', 'Failed to fetch recent invoices.');
+        console.error("Error fetching recent invoices:", error);
+        addAlert("danger", "Failed to fetch recent invoices.");
       }
     };
     fetchRecentInvoices();
@@ -150,30 +168,30 @@ function Billing() {
 
   // Select a customer
   const handleSelectCustomer = (selectedOption) => {
-    const customerId = selectedOption ? selectedOption.value : '';
-    const customer = customers.find(c => String(c.id) === String(customerId));
+    const customerId = selectedOption ? selectedOption.value : "";
+    const customer = customers.find((c) => String(c.id) === String(customerId));
     setSelectedCustomer(customer || null);
     if (customer) {
-      setInvoiceData(prev => ({
+      setInvoiceData((prev) => ({
         ...prev,
         to: {
           name: customer.name,
           address: customer.address,
           email: customer.email,
-          phone: customer.phone
-        }
+          phone: customer.phone,
+        },
       }));
     } else {
-      setInvoiceData(prev => ({
+      setInvoiceData((prev) => ({
         ...prev,
-        to: { name: '', address: '', email: '', phone: '' }
+        to: { name: "", address: "", email: "", phone: "" },
       }));
     }
   };
 
   // Stock helper
   const getAvailableStock = (item_id) => {
-    const stockItem = itemsStock.find(item => item.id === item_id);
+    const stockItem = itemsStock.find((item) => item.id === item_id);
     return stockItem ? stockItem.quantity : 0;
   };
 
@@ -182,18 +200,20 @@ function Billing() {
     const { name, value } = e.target;
     if (index !== null && field) {
       const updatedItems = [...invoiceData.items];
-      if (name === 'subtotal') {
+      if (name === "subtotal") {
         const parsedValue = parseFloat(value);
         updatedItems[index][name] = !isNaN(parsedValue) ? parsedValue : 0;
       } else {
         updatedItems[index][name] = value;
       }
 
-      if (name === 'selling_price' || name === 'quantity') {
+      if (name === "selling_price" || name === "quantity") {
         const sellingPrice = parseFloat(updatedItems[index].selling_price);
         const quantity = parseInt(updatedItems[index].quantity, 10);
         if (!isNaN(sellingPrice) && !isNaN(quantity)) {
-          updatedItems[index].subtotal = parseFloat((sellingPrice * quantity).toFixed(2));
+          updatedItems[index].subtotal = parseFloat(
+            (sellingPrice * quantity).toFixed(2)
+          );
         }
       }
       setInvoiceData({ ...invoiceData, items: updatedItems });
@@ -219,7 +239,10 @@ function Billing() {
       items[index].subtotal = parseFloat((sp * currentQty).toFixed(2));
       setInvoiceData({ ...invoiceData, items });
     } else {
-      addAlert('warning', `Cannot exceed available stock (${available}) for "${items[index].name}".`);
+      addAlert(
+        "warning",
+        `Cannot exceed available stock (${available}) for "${items[index].name}".`
+      );
     }
   };
 
@@ -233,7 +256,10 @@ function Billing() {
       items[index].subtotal = parseFloat((sp * currentQty).toFixed(2));
       setInvoiceData({ ...invoiceData, items });
     } else {
-      addAlert('warning', `Quantity for "${items[index].name}" cannot be less than 1.`);
+      addAlert(
+        "warning",
+        `Quantity for "${items[index].name}" cannot be less than 1.`
+      );
     }
   };
 
@@ -252,21 +278,35 @@ function Billing() {
 
   // Add/Remove items
   const addItem = () => {
-    setInvoiceData(prev => ({
+    setInvoiceData((prev) => ({
       ...prev,
-      items: [...prev.items, { item_id: '', name: '', dimension: '', category: '', selling_price: 0, unit: '', quantity: 1, subtotal: 0 }]
+      items: [
+        ...prev.items,
+        {
+          item_id: "",
+          name: "",
+          dimension: "",
+          category: "",
+          selling_price: 0,
+          unit: "",
+          quantity: 1,
+          subtotal: 0,
+        },
+      ],
     }));
   };
 
   const removeItem = (index) => {
     const updatedItems = invoiceData.items.filter((_, i) => i !== index);
-    setInvoiceData(prev => ({ ...prev, items: updatedItems }));
+    setInvoiceData((prev) => ({ ...prev, items: updatedItems }));
   };
 
   // Handle item select
   const handleItemSelection = (selectedOption, index) => {
-    const itemId = selectedOption ? selectedOption.value : '';
-    const selectedItem = itemsStock.find(item => String(item.id) === String(itemId));
+    const itemId = selectedOption ? selectedOption.value : "";
+    const selectedItem = itemsStock.find(
+      (item) => String(item.id) === String(itemId)
+    );
     const updatedItems = [...invoiceData.items];
     if (selectedItem) {
       updatedItems[index] = {
@@ -274,21 +314,28 @@ function Billing() {
         item_id: selectedItem.id,
         name: selectedItem.name,
         dimension: selectedItem.dimension,
-        category: selectedItem.Category ? selectedItem.Category.name : 'N/A',
+        category: selectedItem.Category ? selectedItem.Category.name : "N/A",
         selling_price: selectedItem.selling_price,
-        unit: selectedItem.unit || '',
-        quantity: Math.min(updatedItems[index].quantity || 1, selectedItem.quantity),
-        subtotal: parseFloat((selectedItem.selling_price * (updatedItems[index].quantity || 1)).toFixed(2)),
+        unit: selectedItem.unit || "",
+        quantity: Math.min(
+          updatedItems[index].quantity || 1,
+          selectedItem.quantity
+        ),
+        subtotal: parseFloat(
+          (
+            selectedItem.selling_price * (updatedItems[index].quantity || 1)
+          ).toFixed(2)
+        ),
       };
     } else {
       updatedItems[index] = {
         ...updatedItems[index],
-        item_id: '',
-        name: '',
-        dimension: '',
-        category: '',
+        item_id: "",
+        name: "",
+        dimension: "",
+        category: "",
         selling_price: 0,
-        unit: '',
+        unit: "",
         subtotal: 0,
         quantity: 1,
       };
@@ -298,7 +345,10 @@ function Billing() {
 
   // Calculate summary
   const calculateSummary = () => {
-    const subtotal = invoiceData.items.reduce((acc, item) => acc + (parseFloat(item.subtotal) || 0), 0);
+    const subtotal = invoiceData.items.reduce(
+      (acc, item) => acc + (parseFloat(item.subtotal) || 0),
+      0
+    );
     const discount = parseFloat(invoiceData.discount) || 0;
     const taxableAmount = subtotal - discount;
     const tax = ((parseFloat(invoiceData.tax) || 0) / 100) * taxableAmount;
@@ -313,19 +363,22 @@ function Billing() {
 
     // BASIC VALIDATIONS
     if (!selectedCustomer) {
-      addAlert('warning', 'Please select a customer.');
+      addAlert("warning", "Please select a customer.");
       setIsSubmitting(false);
       return;
     }
 
     if (!invoiceData.paymentMethod) {
-      addAlert('warning', 'Payment Method is required.');
+      addAlert("warning", "Payment Method is required.");
       setIsSubmitting(false);
       return;
     }
 
-    if (!invoiceData.receivedAmount || parseFloat(invoiceData.receivedAmount) < 0) {
-      addAlert('warning', 'Received Amount is required (cannot be negative).');
+    if (
+      invoiceData.receivedAmount === "" ||
+      parseFloat(invoiceData.receivedAmount) < 0
+    ) {
+      addAlert("warning", "Received Amount is required (cannot be negative).");
       setIsSubmitting(false);
       return;
     }
@@ -334,32 +387,49 @@ function Billing() {
     for (let i = 0; i < invoiceData.items.length; i++) {
       const item = invoiceData.items[i];
       if (!item.item_id) {
-        addAlert('warning', `Please select an item for row ${i + 1}.`);
+        addAlert("warning", `Please select an item for row ${i + 1}.`);
         setIsSubmitting(false);
         return;
       }
       if (item.quantity < 1) {
-        addAlert('warning', `Quantity for item "${item.name}" must be at least 1.`);
+        addAlert(
+          "warning",
+          `Quantity for item "${item.name}" must be at least 1.`
+        );
         setIsSubmitting(false);
         return;
       }
       const availableStock = getAvailableStock(item.item_id);
       if (item.quantity > availableStock) {
-        addAlert('warning', `Quantity for item "${item.name}" exceeds available stock (${availableStock}).`);
+        addAlert(
+          "warning",
+          `Quantity for item "${item.name}" exceeds available stock (${availableStock}).`
+        );
         setIsSubmitting(false);
         return;
       }
       if (item.selling_price < 0) {
-        addAlert('warning', `Selling Price for item "${item.name}" cannot be negative.`);
+        addAlert(
+          "warning",
+          `Selling Price for item "${item.name}" cannot be negative.`
+        );
         setIsSubmitting(false);
         return;
       }
       if (item.subtotal < 0) {
-        addAlert('warning', `Subtotal for item "${item.name}" cannot be negative.`);
+        addAlert(
+          "warning",
+          `Subtotal for item "${item.name}" cannot be negative.`
+        );
         setIsSubmitting(false);
         return;
       }
     }
+
+    // Calculate summary
+    const summary = calculateSummary();
+    const parsedReceivedAmount = parseFloat(invoiceData.receivedAmount) || 0;
+    const invoicePendingAmount = summary.total - parsedReceivedAmount;
 
     // Build request object
     const invoiceToSubmit = {
@@ -373,7 +443,7 @@ function Billing() {
       currency: invoiceData.currency,
       notes: invoiceData.notes,
       paymentTerms: invoiceData.paymentTerms,
-      items: invoiceData.items.map(item => ({
+      items: invoiceData.items.map((item) => ({
         item_id: item.item_id,
         name: item.name,
         dimension: item.dimension,
@@ -384,58 +454,85 @@ function Billing() {
         subtotal: parseFloat(item.subtotal),
       })),
       paymentMethod: invoiceData.paymentMethod,
-      receivedAmount: parseFloat(invoiceData.receivedAmount) || 0
+      receivedAmount: parsedReceivedAmount,
+      invoicePendingAmount: invoicePendingAmount, // Set pending amount
     };
 
-    console.log('Invoice Data to Submit:', invoiceToSubmit);
+    console.log("Invoice Data to Submit:", invoiceToSubmit);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/invoices', invoiceToSubmit, {
-        headers: getAuthHeader(),
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/invoices",
+        invoiceToSubmit,
+        {
+          headers: getAuthHeader(),
+        }
+      );
 
       setLatestInvoiceNumber(response.data.invoiceNumber);
       // Prepend new invoice in "recent invoices"
-      setRecentInvoices(prev => [response.data, ...prev.slice(0, 19)]);
-      addAlert('success', `Invoice ${response.data.invoiceNumber} created successfully.`);
+      setRecentInvoices((prev) => [response.data, ...prev.slice(0, 19)]);
+      addAlert(
+        "success",
+        `Invoice ${response.data.invoiceNumber} created successfully.`
+      );
 
       // Reset form
       setInvoiceData({
-        invoiceDate: '',
-        dueDate: '',
-        poNumber: '',
-        to: { name: '', address: '', email: '', phone: '' },
+        invoiceDate: "",
+        dueDate: "",
+        poNumber: "",
+        to: { name: "", address: "", email: "", phone: "" },
         items: [
-          { item_id: '', name: '', dimension: '', category: '', selling_price: 0, unit: '', quantity: 1, subtotal: 0 }
+          {
+            item_id: "",
+            name: "",
+            dimension: "",
+            category: "",
+            selling_price: 0,
+            unit: "",
+            quantity: 1,
+            subtotal: 0,
+          },
         ],
         discount: 0,
         tax: 0,
-        taxType: 'GST',
-        currency: '₹',
-        notes: '',
-        paymentTerms: '',
-        paymentMethod: '',
-        receivedAmount: ''
+        taxType: "GST",
+        currency: "₹",
+        notes: "",
+        paymentTerms: "",
+        paymentMethod: "",
+        receivedAmount: "",
+        invoicePendingAmount: 0,
       });
 
       // Refresh stock
-      const refreshedStock = await axios.get('http://localhost:3000/api/items', {
-        headers: getAuthHeader(),
-      });
+      const refreshedStock = await axios.get(
+        "http://localhost:3000/api/items",
+        {
+          headers: getAuthHeader(),
+        }
+      );
       setItemsStock(refreshedStock.data);
 
       // Update latest invoice number
-      const latestResponse = await axios.get('http://localhost:3000/api/invoices/latest', {
-        headers: getAuthHeader(),
-      });
+      const latestResponse = await axios.get(
+        "http://localhost:3000/api/invoices/latest",
+        {
+          headers: getAuthHeader(),
+        }
+      );
       setLatestInvoiceNumber(latestResponse.data.invoiceNumber);
-
     } catch (error) {
-      console.error('Error creating invoice:', error);
-      if (error.response && error.response.data && error.response.data.message) {
-        addAlert('danger', error.response.data.message);
+      console.error("Error creating invoice:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        addAlert("danger", error.response.data.message);
       } else {
-        addAlert('danger', 'Failed to create invoice.');
+        addAlert("danger", "Failed to create invoice.");
       }
     } finally {
       setIsSubmitting(false);
@@ -456,15 +553,15 @@ function Billing() {
   const summary = calculateSummary();
 
   // For react-select
-  const customerOptions = customers.map(customer => ({
+  const customerOptions = customers.map((customer) => ({
     value: customer.id,
     label: customer.name,
   }));
 
-  const itemOptions = itemsStock.map(item => ({
+  const itemOptions = itemsStock.map((item) => ({
     value: item.id,
     label: `${item.name} (${item.dimension})`,
-    category: item.Category ? item.Category.name : 'N/A',
+    category: item.Category ? item.Category.name : "N/A",
     availableStock: item.quantity,
     unit: item.unit,
     isDisabled: item.quantity <= 0,
@@ -473,35 +570,35 @@ function Billing() {
   const customSelectStyles = {
     menu: (provided) => ({
       ...provided,
-      maxHeight: '200px',
-      overflowY: 'auto',
-      width: '400px',
+      maxHeight: "200px",
+      overflowY: "auto",
+      width: "400px",
     }),
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? 'var(--color-secondary)'
+        ? "var(--color-secondary)"
         : state.isFocused
-          ? '#e3f2fd'
-          : 'transparent',
-      color: state.isSelected ? '#fff' : '#333',
-      cursor: 'pointer',
+        ? "#e3f2fd"
+        : "transparent",
+      color: state.isSelected ? "#fff" : "#333",
+      cursor: "pointer",
     }),
     control: (provided) => ({
       ...provided,
-      minHeight: '38px',
+      minHeight: "38px",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: '#333',
+      color: "#333",
     }),
     dropdownIndicator: (provided) => ({
       ...provided,
-      color: '#333',
+      color: "#333",
     }),
     indicatorSeparator: (provided) => ({
       ...provided,
-      backgroundColor: '#ccc',
+      backgroundColor: "#ccc",
     }),
   };
 
@@ -514,12 +611,14 @@ function Billing() {
 
           {/* Alerts */}
           <div className="alert-container">
-            {alerts.map(alert => (
+            {alerts.map((alert) => (
               <div key={alert.id} className={`alert alert-${alert.type}`}>
                 <span>{alert.message}</span>
                 <button
                   className="close-btn"
-                  onClick={() => setAlerts(prev => prev.filter(a => a.id !== alert.id))}
+                  onClick={() =>
+                    setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
+                  }
                 >
                   &times;
                 </button>
@@ -541,8 +640,10 @@ function Billing() {
               <div className="invoice-details">
                 <h3>Invoice</h3>
                 <p>
-                  <strong>Number:</strong>{' '}
-                  {latestInvoiceNumber ? incrementInvoiceNumber(latestInvoiceNumber) : 'Fetching...'}
+                  <strong>Number:</strong>{" "}
+                  {latestInvoiceNumber
+                    ? incrementInvoiceNumber(latestInvoiceNumber)
+                    : "Fetching..."}
                 </p>
                 <p>
                   <strong>Date:</strong>
@@ -573,7 +674,9 @@ function Billing() {
             <div className="invoice-sections">
               <div className="section from-section">
                 <h3>From:</h3>
-                <p><strong>Himalayan Timber Traders</strong></p>
+                <p>
+                  <strong>Himalayan Timber Traders</strong>
+                </p>
                 <p>456 Timber Lane, Kathmandu, Nepal</p>
                 <p>Email: contact@himalyantimbertraders.com</p>
                 <p>Phone: +977-1-2345678</p>
@@ -584,7 +687,14 @@ function Billing() {
                   <strong>Customer:</strong>
                   <Select
                     options={customerOptions}
-                    value={selectedCustomer ? { value: selectedCustomer.id, label: selectedCustomer.name } : null}
+                    value={
+                      selectedCustomer
+                        ? {
+                            value: selectedCustomer.id,
+                            label: selectedCustomer.name,
+                          }
+                        : null
+                    }
                     onChange={handleSelectCustomer}
                     placeholder="-- Select Customer --"
                     isClearable
@@ -595,9 +705,15 @@ function Billing() {
                 </div>
                 {selectedCustomer && (
                   <div className="customer-details">
-                    <p><strong>Address:</strong> {selectedCustomer.address}</p>
-                    <p><strong>Email:</strong> {selectedCustomer.email}</p>
-                    <p><strong>Phone:</strong> {selectedCustomer.phone}</p>
+                    <p>
+                      <strong>Address:</strong> {selectedCustomer.address}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {selectedCustomer.email}
+                    </p>
+                    <p>
+                      <strong>Phone:</strong> {selectedCustomer.phone}
+                    </p>
                   </div>
                 )}
               </div>
@@ -629,10 +745,14 @@ function Billing() {
                           options={itemOptions}
                           value={
                             item.item_id
-                              ? itemOptions.find(option => option.value === item.item_id)
+                              ? itemOptions.find(
+                                  (option) => option.value === item.item_id
+                                )
                               : null
                           }
-                          onChange={(selectedOption) => handleItemSelection(selectedOption, index)}
+                          onChange={(selectedOption) =>
+                            handleItemSelection(selectedOption, index)
+                          }
                           placeholder="-- Select Item --"
                           isClearable
                           classNamePrefix="react-select-item"
@@ -655,7 +775,9 @@ function Billing() {
                           type="text"
                           name="dimension"
                           value={item.dimension}
-                          onChange={(e) => handleInputChange(e, index, 'dimension')}
+                          onChange={(e) =>
+                            handleInputChange(e, index, "dimension")
+                          }
                           required
                         />
                       </td>
@@ -664,7 +786,9 @@ function Billing() {
                           type="number"
                           name="selling_price"
                           value={item.selling_price}
-                          onChange={(e) => handleInputChange(e, index, 'selling_price')}
+                          onChange={(e) =>
+                            handleInputChange(e, index, "selling_price")
+                          }
                           step="0.01"
                           min="0"
                           required
@@ -692,9 +816,15 @@ function Billing() {
                             type="number"
                             name="quantity"
                             value={item.quantity}
-                            onChange={(e) => handleInputChange(e, index, 'quantity')}
+                            onChange={(e) =>
+                              handleInputChange(e, index, "quantity")
+                            }
                             min="1"
-                            max={item.item_id ? getAvailableStock(item.item_id) : ''}
+                            max={
+                              item.item_id
+                                ? getAvailableStock(item.item_id)
+                                : ""
+                            }
                             required
                           />
                           <button
@@ -708,7 +838,8 @@ function Billing() {
                         </div>
                         {item.item_id && (
                           <small className="quantity-info">
-                            Available: {getAvailableStock(item.item_id)} {item.unit}
+                            Available: {getAvailableStock(item.item_id)}{" "}
+                            {item.unit}
                           </small>
                         )}
                       </td>
@@ -717,7 +848,9 @@ function Billing() {
                           type="number"
                           name="subtotal"
                           value={item.subtotal}
-                          onChange={(e) => handleInputChange(e, index, 'subtotal')}
+                          onChange={(e) =>
+                            handleInputChange(e, index, "subtotal")
+                          }
                           step="0.01"
                           min="0"
                           required
@@ -745,7 +878,9 @@ function Billing() {
             <div className="invoice-summary">
               <div className="summary-item">
                 <label>Subtotal:</label>
-                <span>{summary.subtotal.toFixed(2)} {invoiceData.currency}</span>
+                <span>
+                  {summary.subtotal.toFixed(2)} {invoiceData.currency}
+                </span>
               </div>
 
               {/* Payment Method (wrapped in a container for the icon) */}
@@ -755,7 +890,7 @@ function Billing() {
                   <FaMoneyCheckAlt className="payment-method-icon" />
                   <select
                     name="paymentMethod"
-                    value={invoiceData.paymentMethod || ''}
+                    value={invoiceData.paymentMethod || ""}
                     onChange={handleInputChange}
                     required
                     className="payment-method-select"
@@ -781,7 +916,6 @@ function Billing() {
                     min="0"
                     step="0.01"
                     placeholder="0.00"
-                    
                   />
                   <button
                     type="button"
@@ -791,7 +925,8 @@ function Billing() {
                   >
                     <FaPlus />
                   </button>
-                </div> {invoiceData.currency}
+                </div>{" "}
+                {invoiceData.currency}
               </div>
               <div className="summary-item">
                 <label>Tax ({invoiceData.taxType} %):</label>
@@ -813,11 +948,14 @@ function Billing() {
                   >
                     <FaPlus />
                   </button>
-                </div> {invoiceData.currency}
+                </div>{" "}
+                {invoiceData.currency}
               </div>
               <div className="summary-item total">
                 <label>Total:</label>
-                <span>{summary.total.toFixed(2)} {invoiceData.currency}</span>
+                <span>
+                  {summary.total.toFixed(2)} {invoiceData.currency}
+                </span>
               </div>
 
               {/* Received Amount (wrapped in a container for the icon) */}
@@ -830,13 +968,25 @@ function Billing() {
                     name="receivedAmount"
                     step="0.01"
                     min="0"
-                    value={invoiceData.receivedAmount || ''}
+                    value={invoiceData.receivedAmount || ""}
                     onChange={handleInputChange}
                     placeholder="0.00"
                     required
                     className="received-amount-input"
                   />
                 </div>
+              </div>
+
+              {/* Display Pending Amount */}
+              <div className="summary-item pending-amount">
+                <label>Pending Amount:</label>
+                <span>
+                  {(
+                    summary.total -
+                    (parseFloat(invoiceData.receivedAmount) || 0)
+                  ).toFixed(2)}{" "}
+                  {invoiceData.currency}
+                </span>
               </div>
             </div>
 
@@ -864,8 +1014,12 @@ function Billing() {
 
             {/* Invoice Actions */}
             <div className="invoice-actions">
-              <button type="submit" className="btn-submit" disabled={isSubmitting}>
-                <FaSave /> {isSubmitting ? 'Saving...' : 'Save Invoice'}
+              <button
+                type="submit"
+                className="btn-submit"
+                disabled={isSubmitting}
+              >
+                <FaSave /> {isSubmitting ? "Saving..." : "Save Invoice"}
               </button>
             </div>
           </form>
@@ -883,6 +1037,7 @@ function Billing() {
                     <th>Total</th>
                     <th>Payment Method</th>
                     <th>Received Amount</th>
+                    <th>Pending Amount</th>
                     <th>Customer</th>
                     <th>Actions</th>
                   </tr>
@@ -900,11 +1055,29 @@ function Billing() {
                         <td>{invoice.invoiceDate}</td>
                         <td>{invoice.dueDate}</td>
                         <td>{`${invoice.currency} ${total.toFixed(2)}`}</td>
-                        <td>{invoice.paymentMethod || 'N/A'}</td>
-                        <td>{invoice.receivedAmount !== undefined ? invoice.receivedAmount : 'N/A'}</td>
-                        <td>{invoice.Customer ? invoice.Customer.name : 'N/A'}</td>
+                        <td>{invoice.paymentMethod || "N/A"}</td>
                         <td>
-                          <Link to={`/fullinvoice/${invoice.id}`} state={{ invoice }}>
+                          {invoice.receivedAmount !== undefined
+                            ? `${
+                                invoice.currency
+                              } ${invoice.receivedAmount.toFixed(2)}`
+                            : "N/A"}
+                        </td>
+                        <td>
+                          {invoice.invoicePendingAmount !== undefined
+                            ? `${
+                                invoice.currency
+                              } ${invoice.invoicePendingAmount.toFixed(2)}`
+                            : "N/A"}
+                        </td>
+                        <td>
+                          {invoice.Customer ? invoice.Customer.name : "N/A"}
+                        </td>
+                        <td>
+                          <Link
+                            to={`/fullinvoice/${invoice.id}`}
+                            state={{ invoice }}
+                          >
                             View
                           </Link>
                         </td>
@@ -929,12 +1102,18 @@ function Billing() {
 
       {/* Alerts container (layered) */}
       <div className="alert-container">
-        {alerts.map(alert => (
-          <div key={alert.id} className={`alert alert-${alert.type}`} data-icon="">
+        {alerts.map((alert) => (
+          <div
+            key={alert.id}
+            className={`alert alert-${alert.type}`}
+            data-icon=""
+          >
             <span>{alert.message}</span>
             <button
               className="close-btn"
-              onClick={() => setAlerts(prev => prev.filter(a => a.id !== alert.id))}
+              onClick={() =>
+                setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
+              }
             >
               &times;
             </button>
@@ -947,13 +1126,13 @@ function Billing() {
 
 // Helper function to increment the invoice number
 const incrementInvoiceNumber = (currentNumber) => {
-  const parts = currentNumber.split('-');
-  if (parts.length !== 3) return 'INV-YYYYMM-XXXX';
+  const parts = currentNumber.split("-");
+  if (parts.length !== 3) return "INV-YYYYMM-XXXX";
   let prefix = parts[0];
   let datePart = parts[1];
   let numberPart = parts[2];
   let nextNumber = parseInt(numberPart, 10) + 1;
-  nextNumber = nextNumber.toString().padStart(4, '0');
+  nextNumber = nextNumber.toString().padStart(4, "0");
   return `${prefix}-${datePart}-${nextNumber}`;
 };
 

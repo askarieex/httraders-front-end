@@ -11,7 +11,7 @@ import Customers from "./pages/Customers";
 import CustomerDetails from "./pages/CustomerDetails";
 import InvoiceDetailedView from "./pages/InvoiceDetailedView";
 import EditInvoice from "./pages/EditInvoice";
-
+import TransactionEdit from "./pages/TransactionEdit";
 function App() {
   return (
     <Routes>
@@ -78,7 +78,7 @@ function App() {
       />
       <Route path="/fullinvoice/:id" element={<InvoiceDetailedView />} />
       <Route path="/edit-invoice/:id" element={<EditInvoice />} />
-
+      <Route path="/transaction/edit/:id" element={<TransactionEdit />} />
     </Routes>
   );
 }

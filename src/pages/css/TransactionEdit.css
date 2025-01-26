@@ -1,0 +1,542 @@
+/* src/pages/css/TransactionEdit.css */
+
+/* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+/* ============================= */
+/*        Root Variables         */
+/* ============================= */
+
+/* Re-defining variables to ensure consistency */
+:root {
+    /* Color Palette */
+    --te-primary-color: #1e40af; /* Indigo */
+    --te-secondary-color: #9333ea; /* Purple */
+    --te-danger-color: #dc2626; /* Red */
+    --te-warning-color: #f97316; /* Orange */
+    --te-info-color: #2563eb; /* Blue */
+    --te-success-color: #16a34a; /* Green */
+    --te-light-color: #f3f4f6; /* Light Gray */
+    --te-dark-color: #111827; /* Almost Black */
+    --te-bg-white: #ffffff;
+    --te-text-muted: #6b7280; /* Gray */
+    --te-border-color: #d1d5db; /* Light Gray */
+    --te-table-header-bg: #1e40af; /* Indigo */
+    --te-table-row-hover-bg: #e5e7eb; /* Slightly Darker Light Gray */
+    --te-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --te-transition-speed: 0.3s;
+    --te-font-family: 'Roboto', sans-serif;
+    --te-striped-row-bg: #f9fafb; /* Light Gray */
+    --te-stock-in: #28a745;
+    --te-stock-low: #ffc107;
+    --te-stock-out: #dc3545;
+}
+
+/* ============================= */
+/*        Global Styles          */
+/* ============================= */
+
+.te-transaction-edit-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--te-light-color);
+    font-family: var(--te-font-family);
+}
+
+.te-transaction-edit-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.te-transaction-edit-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--te-light-color);
+    font-size: 0.75rem; /* Small font */
+    overflow-y: auto;
+}
+
+/* ============================= */
+/*      Edit Transaction Card    */
+/* ============================= */
+
+.te-edit-transaction-card {
+    background-color: var(--te-bg-white);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: var(--te-dark-color);
+    box-shadow: var(--te-shadow);
+    transition: box-shadow var(--te-transition-speed), transform var(--te-transition-speed);
+}
+
+.te-edit-transaction-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.te-edit-transaction-card__title {
+    margin-top: 0;
+    color: var(--te-primary-color);
+    font-size: 1.5rem; /* Increased font size for prominence */
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================= */
+/*            Form               */
+/* ============================= */
+
+.te-transaction-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.te-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.te-form-group label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--te-dark-color);
+}
+
+.te-form-group input,
+.te-form-group select,
+.te-form-group textarea {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--te-border-color);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color var(--te-transition-speed), box-shadow var(--te-transition-speed);
+}
+
+.te-form-group input:focus,
+.te-form-group select:focus,
+.te-form-group textarea:focus {
+    border-color: var(--te-primary-color);
+    box-shadow: 0 0 5px rgba(30, 64, 175, 0.5);
+}
+
+.te-error-message {
+    color: var(--te-danger-color);
+    font-size: 0.65rem;
+    margin-top: 0.2rem;
+}
+
+.te-required {
+    color: var(--te-danger-color);
+}
+
+/* ============================= */
+/*          Form Actions         */
+/* ============================= */
+
+.te-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    grid-column: 1 / -1;
+}
+
+.te-btn-cancel {
+    background-color: var(--te-danger-color);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color var(--te-transition-speed), transform 0.2s ease;
+}
+
+.te-btn-cancel:hover {
+    background-color: #b91c1c;
+    transform: translateY(-2px);
+}
+
+.te-btn-submit {
+    background-color: var(--te-primary-color);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color var(--te-transition-speed), transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.te-btn-submit:hover {
+    background-color: #1e3a8a;
+    transform: translateY(-2px);
+}
+
+/* ============================= */
+/*         Alerts Section        */
+/* ============================= */
+
+.te-alerts-section {
+    position: fixed;
+    top: 80px;
+    right: 30px;
+    z-index: 1001;
+}
+
+.te-alert {
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.6rem;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--te-shadow);
+    animation: te-fadein 0.5s, te-fadeout 0.5s 4.5s forwards;
+}
+
+.te-alert--success {
+    background-color: var(--te-success-color);
+}
+
+.te-alert--danger {
+    background-color: var(--te-danger-color);
+}
+
+.te-alert--info {
+    background-color: var(--te-info-color);
+}
+
+.te-alert--warning {
+    background-color: var(--te-warning-color);
+}
+
+.te-alert .te-close-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    color: inherit;
+    margin-left: 1rem;
+}
+
+@keyframes te-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes te-fadeout {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* ============================= */
+/*            Modals             */
+/* ============================= */
+
+.te-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.8); /* Dark Overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: te-fadeInOverlay 0.3s ease;
+}
+
+@keyframes te-fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.te-modal-container {
+    background-color: var(--te-bg-white);
+    width: 700px;
+    max-width: 95%;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--te-shadow);
+    position: relative;
+    animation: te-slideDownModal 0.3s ease;
+}
+
+@keyframes te-slideDownModal {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.te-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--te-text-muted);
+    transition: color var(--te-transition-speed);
+}
+
+.te-modal-close:hover {
+    color: var(--te-dark-color);
+}
+
+.te-modal-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    color: var(--te-primary-color);
+    text-align: center;
+}
+
+/* ============================= */
+/*        React-Select Styles     */
+/* ============================= */
+
+/* Override React-Select styles to match the theme */
+.te-react-select__control {
+    border-color: var(--te-border-color) !important;
+    box-shadow: none !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px !important;
+    min-height: 40px !important;
+}
+
+.te-react-select__control--is-focused {
+    border-color: var(--te-primary-color) !important;
+    box-shadow: 0 0 0 1px var(--te-primary-color) !important;
+}
+
+.te-react-select__menu {
+    z-index: 3000;
+    font-size: 0.8rem;
+}
+
+.te-react-select__option {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+}
+
+.te-react-select__option--is-focused {
+    background-color: var(--te-table-row-hover-bg);
+}
+
+.te-react-select__option--is-selected {
+    background-color: var(--te-primary-color);
+    color: #fff;
+}
+
+/* ============================= */
+/*        Responsive Design       */
+/* ============================= */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+    .te-transaction-edit-content {
+        padding: 1.5rem;
+    }
+
+    .te-transaction-form {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .te-edit-transaction-card {
+        padding: 1.5rem;
+    }
+
+    .te-btn-submit,
+    .te-btn-cancel {
+        width: 100%;
+        font-size: 0.75rem;
+    }
+}
+
+/* Mobile and below */
+@media (max-width: 768px) {
+    .te-transaction-edit-content {
+        padding: 1rem;
+    }
+
+    .te-transaction-form {
+        grid-template-columns: 1fr;
+    }
+
+    .te-edit-transaction-card {
+        padding: 1rem;
+    }
+
+    .te-modal-container {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .te-transaction-edit-content {
+        padding: 0.8rem;
+    }
+
+    .te-edit-transaction-card {
+        padding: 1rem;
+    }
+
+    .te-btn-submit,
+    .te-btn-cancel {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.8rem;
+    }
+
+    .te-modal-container {
+        padding: 1rem;
+    }
+}
+
+/* ============================= */
+/*         Additional Styles      */
+/* ============================= */
+
+/* Currency Symbol Styling */
+.te-currency {
+    margin-right: 0.2rem;
+    font-size: 0.8rem;
+    color: var(--te-text-dark);
+}
+
+/* Status Badge Colors (Reiterated for consistency) */
+.te-status-badge--paid {
+    background-color: var(--te-success-color);
+}
+
+.te-status-badge--partially-paid {
+    background-color: var(--te-warning-color);
+    color: var(--te-dark-color);
+}
+
+.te-status-badge--pending {
+    background-color: var(--te-info-color);
+}
+
+.te-status-badge--expired {
+    background-color: var(--te-danger-color);
+}
+
+.te-status-badge--default {
+    background-color: var(--te-text-muted);
+}
+
+/* Clickable Rows */
+.te-clickable-row {
+    cursor: pointer;
+    transition: background-color var(--te-transition-speed);
+}
+
+.te-clickable-row:hover {
+    background-color: var(--te-table-row-hover-bg);
+}
+
+/* Disabled Delete Button Styles */
+.te-btn-delete--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.te-btn-delete--disabled:hover {
+    background-color: var(--te-danger-color);
+}
+
+/* ============================= */
+/*          Pagination           */
+/* ============================= */
+
+.te-pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.te-pagination {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    padding: 0;
+}
+
+.te-pagination li a {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--te-border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--te-dark-color);
+    font-size: 0.8rem;
+    transition: background-color var(--te-transition-speed), color var(--te-transition-speed);
+}
+
+.te-pagination li a:hover {
+    background-color: var(--te-table-row-hover-bg);
+}
+
+.te-pagination li.active a {
+    background-color: var(--te-primary-color);
+    color: #fff;
+    border-color: var(--te-primary-color);
+}
+
+.te-rows-per-page {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.te-rows-per-page label {
+    font-size: 0.8rem;
+    color: var(--te-dark-color);
+}
+
+.te-rows-per-page select {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--te-border-color);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color var(--te-transition-speed);
+}
+
+.te-rows-per-page select:focus {
+    border-color: var(--te-primary-color);
+}
