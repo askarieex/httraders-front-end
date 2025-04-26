@@ -1,0 +1,284 @@
+import tkinter as tk
+from tkinter import ttk, messagebox, filedialog
+import sqlite3
+from datetime import datetime
+import csv
+import hashlib
+import logging
+from tkinter import simpledialog
+
+# ---------------------------
+# Database Configuration
+# ---------------------------
+class Database:
+    def __init__(self):
+        self.conn = sqlite3.connect('inventory.db')
+        self.create_tables()
+        self.create_triggers()
+    
+    def create_tables(self):
+        cursor = self.conn.cursor()
+        # Users Table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        username TEXT UNIQUE NOT NULL,
+                        password TEXT NOT NULL,
+                        role TEXT NOT NULL)''')
+        
+        # Products Table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS products (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        description TEXT,
+                        category TEXT,
+                        quantity INTEGER NOT NULL,
+                        price REAL NOT NULL,
+                        min_stock INTEGER,
+                        supplier_id INTEGER,
+                        last_updated TEXT)''')
+        
+        # Suppliers Table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS suppliers (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        contact TEXT,
+                        email TEXT,
+                        address TEXT)''')
+        
+        # Sales Table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS sales (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        product_id INTEGER NOT NULL,
+                        quantity INTEGER NOT NULL,
+                        sale_date TEXT NOT NULL,
+                        total_price REAL NOT NULL,
+                        user_id INTEGER)''')
+        
+        # Audit Table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS audit_log (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        event_type TEXT NOT NULL,
+                        event_details TEXT,
+                        timestamp TEXT NOT NULL,
+                        user_id INTEGER)''')
+        
+        self.conn.commit()
+
+    def create_triggers(self):
+        cursor = self.conn.cursor()
+        # Trigger for stock updates
+        cursor.execute('''CREATE TRIGGER IF NOT EXISTS update_stock
+                        AFTER INSERT ON sales
+                        BEGIN
+                            UPDATE products SET quantity = quantity - NEW.quantity
+                            WHERE id = NEW.product_id;
+                        END;''')
+        self.conn.commit()
+
+# ---------------------------
+# Authentication System
+# ---------------------------
+class AuthManager:
+    def __init__(self, db):
+        self.db = db
+        self.current_user = None
+    
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
+    
+    def login(self, username, password):
+        cursor = self.db.conn.cursor()
+        cursor.execute('SELECT id, password, role FROM users WHERE username=?', (username,))
+        user = cursor.fetchone()
+        if user and user[1] == self.hash_password(password):
+            self.current_user = {'id': user[0], 'role': user[2]}
+            return True
+        return False
+    
+    def create_user(self, username, password, role):
+        try:
+            cursor = self.db.conn.cursor()
+            cursor.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+                         (username, self.hash_password(password), role))
+            self.db.conn.commit()
+            return True
+        except sqlite3.IntegrityError:
+            return False
+
+# ---------------------------
+# Main Application
+# ---------------------------
+class InventoryApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Advanced Stock Management System")
+        self.geometry("1200x800")
+        self.db = Database()
+        self.auth = AuthManager(self.db)
+        self.current_user = None
+        
+        self.setup_ui()
+        self.show_login()
+    
+    def setup_ui(self):
+        # Main Container
+        self.notebook = ttk.Notebook(self)
+        
+        # Tabs
+        self.dashboard_tab = ttk.Frame(self.notebook)
+        self.products_tab = ttk.Frame(self.notebook)
+        self.sales_tab = ttk.Frame(self.notebook)
+        self.suppliers_tab = ttk.Frame(self.notebook)
+        self.reports_tab = ttk.Frame(self.notebook)
+        self.users_tab = ttk.Frame(self.notebook)
+        
+        self.notebook.add(self.dashboard_tab, text="Dashboard")
+        self.notebook.add(self.products_tab, text="Products")
+        self.notebook.add(self.sales_tab, text="Sales")
+        self.notebook.add(self.suppliers_tab, text="Suppliers")
+        self.notebook.add(self.reports_tab, text="Reports")
+        self.notebook.add(self.users_tab, text="Users")
+        
+        self.setup_products_tab()
+        self.setup_sales_tab()
+        self.setup_suppliers_tab()
+        self.setup_reports_tab()
+        self.setup_users_tab()
+    
+    def show_login(self):
+        login_window = tk.Toplevel(self)
+        login_window.title("Login")
+        
+        ttk.Label(login_window, text="Username:").grid(row=0, column=0)
+        self.username_entry = ttk.Entry(login_window)
+        self.username_entry.grid(row=0, column=1)
+        
+        ttk.Label(login_window, text="Password:").grid(row=1, column=0)
+        self.password_entry = ttk.Entry(login_window, show="*")
+        self.password_entry.grid(row=1, column=1)
+        
+        ttk.Button(login_window, text="Login", command=self.attempt_login).grid(row=2, columnspan=2)
+    
+    def attempt_login(self):
+        if self.auth.login(self.username_entry.get(), self.password_entry.get()):
+            self.current_user = self.auth.current_user
+            self.notebook.pack(expand=True, fill='both')
+            self.update_ui_permissions()
+            self.load_all_data()
+        else:
+            messagebox.showerror("Login Failed", "Invalid credentials")
+    
+    def update_ui_permissions(self):
+        if self.current_user['role'] != 'admin':
+            self.notebook.hide(self.users_tab)
+    
+    # [Include similar setup methods for other tabs]
+    # [Include data loading methods]
+    # [Include event handlers]
+    # [Include helper functions]
+
+# ---------------------------
+# Product Management
+# ---------------------------
+class ProductManager:
+    def __init__(self, db):
+        self.db = db
+    
+    def add_product(self, product_data):
+        try:
+            cursor = self.db.conn.cursor()
+            cursor.execute('''INSERT INTO products 
+                           (name, description, category, quantity, price, min_stock, supplier_id, last_updated)
+                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+                           (*product_data.values(), datetime.now().isoformat()))
+            self.db.conn.commit()
+            return True
+        except Exception as e:
+            logging.error(f"Product add error: {str(e)}")
+            return False
+    
+    # [Include other CRUD operations]
+
+# ---------------------------
+# Reporting System
+# ---------------------------
+class ReportGenerator:
+    def __init__(self, db):
+        self.db = db
+    
+    def generate_sales_report(self, start_date=None, end_date=None):
+        query = '''SELECT p.name, SUM(s.quantity), SUM(s.total_price)
+                   FROM sales s
+                   JOIN products p ON s.product_id = p.id'''
+        params = []
+        
+        if start_date and end_date:
+            query += " WHERE s.sale_date BETWEEN ? AND ?"
+            params.extend([start_date, end_date])
+        
+        cursor = self.db.conn.cursor()
+        cursor.execute(query, params)
+        return cursor.fetchall()
+    
+    # [Include other report types]
+
+# ---------------------------
+# Supplier Management
+# ---------------------------
+class SupplierManager:
+    def __init__(self, db):
+        self.db = db
+    
+    def add_supplier(self, supplier_data):
+        try:
+            cursor = self.db.conn.cursor()
+            cursor.execute('''INSERT INTO suppliers 
+                           (name, contact, email, address)
+                           VALUES (?, ?, ?, ?)''',
+                           tuple(supplier_data.values()))
+            self.db.conn.commit()
+            return True
+        except Exception as e:
+            logging.error(f"Supplier add error: {str(e)}")
+            return False
+    
+    # [Include other supplier operations]
+
+# ---------------------------
+# Data Export
+# ---------------------------
+class DataExporter:
+    @staticmethod
+    def export_to_csv(data, filename):
+        try:
+            with open(filename, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(data)
+            return True
+        except Exception as e:
+            logging.error(f"Export error: {str(e)}")
+            return False
+    
+    # [Include other export formats]
+
+# ---------------------------
+# Audit System
+# ---------------------------
+class AuditLogger:
+    def __init__(self, db):
+        self.db = db
+    
+    def log_event(self, event_type, details, user_id):
+        cursor = self.db.conn.cursor()
+        cursor.execute('''INSERT INTO audit_log 
+                       (event_type, event_details, timestamp, user_id)
+                       VALUES (?, ?, ?, ?)''',
+                       (event_type, details, datetime.now().isoformat(), user_id))
+        self.db.conn.commit()
+
+# ---------------------------
+# Main Execution
+# ---------------------------
+if __name__ == "__main__":
+    app = InventoryApp()
+    app.mainloop()

@@ -1,13 +1,32 @@
-/* HomePage.css */
+/* src/pages/css/HomePage.css */
 
-/* ======= GLOBAL STYLE (Optional) ======= */
+/* ======= ROOT VARIABLES ======= */
+:root {
+  --color-primary: #4BC0C0; /* Teal */
+  --color-secondary: #FF6384; /* Pink */
+  --color-accent: #FFCE56; /* Yellow */
+  --color-background: #f3f5f9; /* Light Grey */
+  --color-white: #ffffff;
+  --color-gray-light: #e2e8f0;
+  --color-gray: #cbd5e0;
+  --color-gray-dark: #a0aec0;
+  --color-black: #1a202c;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+/* ======= GLOBAL STYLE ======= */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-black);
+}
 
 /* The container for your entire dashboard page: sidebar + main content */
 .home-page {
   display: flex;
   min-height: 100vh;
-  background-color: #f3f5f9; 
 }
 
 /* The main content area (right side if sidebar is on the left) */
@@ -22,116 +41,107 @@
 .home-content {
   padding: 2rem;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto; /* center if needed */
+  max-width: 1600px;
+  margin: 0 auto; /* Center the content */
 }
 
 /* Dashboard Title */
 .dashboard-title {
-  font-size: 2.2rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
   font-weight: 700;
-  color: #222; /* Darker text for good contrast */
-  letter-spacing: 0.5px;
+  color: var(--color-black);
+  letter-spacing: 1px;
+  text-align: center;
 }
 
 /* ======= SUMMARY CARDS ======= */
 .summary-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
-/* 
-  Each card has a bold gradient background, 
-  big text, and high contrast for readability. 
-*/
 .summary-card {
-  background: #e7e7e700; 
-  /* Light-to-bold teal/cyan gradient. You can pick any colors you like. */
+  background: var(--color-white);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-  color: #fff; /* white text for contrast */
-  text-align: left;
-  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .summary-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 18px rgba(0,0,0,0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* Title inside the card: uppercase, slightly smaller for a label style */
-.summary-card h3 {
-  margin: 0 0 0.5rem 0;
+.summary-icon {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1.5rem;
+  transition: background 0.3s ease;
+}
+
+.summary-card:hover .summary-icon {
+  background: var(--color-secondary);
+}
+
+.summary-info h3 {
+  margin: 0;
   font-size: 1rem;
   font-weight: 500;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
-
-/* The main value displayed on the card, large and bold for emphasis */
-.summary-card p {
-  margin: 0;
-  font-size: 2rem; 
-  font-weight: 700;
+  color: var(--color-gray-dark);
   letter-spacing: 0.5px;
-  color: #fff;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  text-transform: uppercase;
 }
 
-/* For optional decorative shapes or icons, you can do something like:
-.summary-card::before {
-  content: "";
-  position: absolute;
-  top: -30px;
-  right: -30px;
-  width: 80px;
-  height: 80px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 50%;
-  z-index: 0;
+.summary-info p {
+  margin: 0.5rem 0 0 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-black);
 }
-*/
 
 /* ======= DASHBOARD ROWS AND PANELS ======= */
 .dashboard-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem; /* more spacing for a bolder design */
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .dashboard-panel {
-  background-color: #fff;
-  border-radius: 10px;
+  background: var(--color-white);
+  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: box-shadow 0.3s ease;
-  position: relative;
 }
 
 .dashboard-panel:hover {
-  box-shadow: 0 8px 16px rgba(0,0,0,0.14);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* Panel Title */
 .dashboard-panel h2 {
   margin-top: 0;
   margin-bottom: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #111;
-  letter-spacing: 0.4px;
+  color: var(--color-black);
+  letter-spacing: 0.5px;
 }
 
-/* Chart panel height */
 .chart-panel {
-  min-height: 400px; 
+  min-height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -141,47 +151,54 @@
 .dashboard-panel table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .dashboard-panel table thead tr {
-  background-color: #e2e8f0; /* light gray-blue */
+  background-color: var(--color-gray-light);
 }
 
 .dashboard-panel table th,
 .dashboard-panel table td {
   text-align: left;
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
-  color: #444;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-gray);
+  color: var(--color-gray-dark);
 }
 
-/* Striped effect */
+.dashboard-panel table th {
+  font-weight: 600;
+}
+
 .dashboard-panel table tbody tr:nth-child(even) {
   background-color: #f9fafb;
 }
 
-/* Hover highlight */
 .dashboard-panel table tbody tr:hover {
   background-color: #f1f5f9;
 }
 
-/* If table is empty */
 .dashboard-panel table td[colspan] {
   text-align: center;
-  color: #888;
+  color: var(--color-gray);
   font-style: italic;
 }
 
-/* Headings for special sections to differentiate them: */
+/* Specific Panels */
 .low-stock-panel h2 {
-  color: #d84315; /* or use a bright red/orange for emphasis */
-}
-.new-stock-panel h2 {
-  color: #00796B; /* teal color */
+  color: #d84315; /* Deep Orange */
 }
 
-/* === LOADING & ERROR === */
+.new-stock-panel h2 {
+  color: #00796B; /* Teal */
+}
+
+.recent-invoices h2,
+.recent-customers h2 {
+  color: var(--color-secondary);
+}
+
+/* ======= LOADING & ERROR ======= */
 .home-page-loading,
 .home-page-error {
   display: flex;
@@ -190,18 +207,91 @@
 
 .loading-message,
 .error-message {
-  margin: auto; 
+  margin: auto;
   padding: 2rem;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--color-gray-dark);
   text-align: center;
 }
 
-/* === MEDIA QUERIES === */
-@media (max-width: 768px) {
-  /* Stack columns on small screens */
+/* ======= RESPONSIVE DESIGN ======= */
+@media (max-width: 1200px) {
+  .summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
   .dashboard-row {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
+}
+
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .summary-info p {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-panel h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ======= SCROLLBAR STYLING ======= */
+.home-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.home-main::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.home-main::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+.home-main::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* ======= CHART TOOLTIP ======= */
+.recharts-tooltip-wrapper {
+  font-size: 0.9rem;
+}
+
+/* ======= CUSTOM LEGENDS ======= */
+.recharts-legend-wrapper {
+  font-size: 0.9rem;
+}
+
+/* ======= GENERAL UTILITIES ======= */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.rounded {
+  border-radius: 8px;
 }

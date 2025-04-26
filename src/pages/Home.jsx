@@ -1,17 +1,21 @@
 // src/pages/HomePage.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Sidebar from '../components/Sidebar';
-import TopNavbar from '../components/TopNavbar';
-import './css/HomePage.css';
-
-/* ===== Recharts Imports ===== */
+import { useTheme } from '../context/ThemeContext';
+import Card from '../components/ui/Card';
+import Button from '../components/ui/Button';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer,
-  LineChart, Line,
-  PieChart, Pie, Cell,
-  RadialBarChart, RadialBar, PolarAngleAxis
+  LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
+
+import {
+  FaBoxOpen,
+  FaFolderOpen,
+  FaFileInvoiceDollar,
+  FaUsers,
+  FaChartLine
+} from 'react-icons/fa';
 
 function HomePage() {
   // Main data states
@@ -21,8 +25,9 @@ function HomePage() {
   const [customers, setCustomers] = useState([]);
 
   // UI/loading/error
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { theme } = useTheme();
 
   // Helper for auth header
   const getAuthHeader = () => {
@@ -76,38 +81,12 @@ function HomePage() {
     }
   });
 
-  /* =======================
-    RECENT 5 INVOICES
-  ======================= */
-  const recentInvoices = [...invoices]
-    .sort((a, b) => new Date(b.invoiceDate) - new Date(a.invoiceDate))
-    .slice(0, 5);
+  const averageInvoiceValue = totalInvoices ? (totalInvoiceAmount / totalInvoices).toFixed(2) : 0;
 
   /* =======================
-    RECENT 5 CUSTOMERS
+    CHART DATA
   ======================= */
-  const recentCustomers = [...customers]
-    .sort((a, b) => b.id - a.id)
-    .slice(0, 5);
-
-  /* =======================
-    LOW-STOCK ITEMS
-  ======================= */
-  const lowStockItems = [...items]
-    .sort((a, b) => (a.quantity || 0) - (b.quantity || 0))
-    .slice(0, 5);
-
-  /* =======================
-    NEW ARRIVALS (assuming item.createdAt exists)
-  ======================= */
-  const newArrivals = [...items]
-    .filter((it) => it.createdAt)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 5);
-
-  /* =======================
-    1) BAR CHART: Stock by Category
-  ======================= */
+  // Stock by Category data
   const categoryMap = new Map(categories.map(c => [c.id, c.name]));
   const itemsByCategory = {};
   items.forEach(item => {
@@ -120,9 +99,7 @@ function HomePage() {
     quantity: qty
   }));
 
-  /* =======================
-    2) LINE CHART: Invoices by Month
-  ======================= */
+  // Invoices by Month data
   function formatMonthYear(date) {
     return `${date.getMonth() + 1}/${date.getFullYear()}`; // "7/2023"
   }
@@ -149,10 +126,7 @@ function HomePage() {
       total: invoiceByMonthMap[monthStr]
     }));
 
-  /* =======================
-    3) PIE CHART: Top 5 Customers by Invoice Amount
-  ======================= */
-  // We'll sum invoice totals by customer
+  // Top Customers data
   const customerTotalsMap = {};
   invoices.forEach(inv => {
     const custId = inv.customer_id;
@@ -163,324 +137,194 @@ function HomePage() {
     }
     customerTotalsMap[custId] = (customerTotalsMap[custId] || 0) + invSum;
   });
-
-  // Convert to array { name, total } and link to Customer name
+  
   const customerMap = new Map(customers.map(c => [c.id, c.name]));
   let pieData = Object.keys(customerTotalsMap).map((custId) => ({
     id: Number(custId),
     name: customerMap.get(Number(custId)) || `Cust#${custId}`,
     total: customerTotalsMap[custId]
   }));
-  // Sort descending
+  // Sort descending and take top 5
   pieData.sort((a, b) => b.total - a.total);
-  // Take top 5
   pieData = pieData.slice(0, 5);
 
   // Some example colors for the pie slices:
-  const pieColors = ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff'];
+  const pieColors = ['#6366f1', '#14b8a6', '#f59e0b', '#ef4444', '#3b82f6'];
 
-  /* =======================
-    4) RADIAL BAR CHART: Item Type Distribution
-  ======================= */
-  // We'll group items by "type" (assuming item.type is a string).
-  const typeMap = {};
-  items.forEach(item => {
-    const t = item.type || 'Unknown';
-    typeMap[t] = (typeMap[t] || 0) + (item.quantity || 0);
-  });
-  // Convert to array for radial bar usage
-  const radialData = Object.entries(typeMap).map(([type, qty]) => ({
-    name: type,
-    value: qty
-  }));
-  // Sort descending
-  radialData.sort((a, b) => b.value - a.value);
+  // Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', { 
+      style: 'currency', 
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
 
-  // We can limit to top ~5 if needed
-  // radialData = radialData.slice(0, 5);
-
-  /* =======================
-    RENDER
-  ======================= */
+  // If loading, show loading state
   if (loading) {
     return (
-      <div className="home-page-loading">
-        <Sidebar />
-        <div className="home-main">
-          <TopNavbar />
-          <div className="loading-message">Loading, please wait...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="home-page-error">
-        <Sidebar />
-        <div className="home-main">
-          <TopNavbar />
-          <div className="error-message">{error}</div>
+      <div className="py-8">
+        <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {[...Array(5)].map((_, i) => (
+            <Card key={i} loading={true} />
+          ))}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="home-page">
-      <Sidebar />
-      <div className="home-main">
-        <TopNavbar />
+    <div className="py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <Button 
+          variant="outline" 
+          onClick={fetchAllData} 
+          leftIcon={<span className="material-icons">refresh</span>}
+        >
+          Refresh Data
+        </Button>
+      </div>
 
-        <div className="home-content">
-          <h1 className="dashboard-title">Dashboard</h1>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <Card 
+          title="TOTAL STOCK" 
+          icon={<FaBoxOpen size={20} />} 
+          iconBg="bg-green-500"
+          hoverable
+        >
+          <div className="text-3xl font-bold text-green-500 mt-2">{totalStock.toLocaleString()}</div>
+        </Card>
+        
+        <Card 
+          title="TOTAL CATEGORIES" 
+          icon={<FaFolderOpen size={20} />} 
+          iconBg="bg-green-500"
+          hoverable
+        >
+          <div className="text-3xl font-bold text-green-500 mt-2">{totalCategories}</div>
+        </Card>
+        
+        <Card 
+          title="TOTAL INVOICES" 
+          icon={<FaFileInvoiceDollar size={20} />} 
+          iconBg="bg-blue-500"
+          hoverable
+        >
+          <div className="text-3xl font-bold text-blue-500 mt-2">{totalInvoices}</div>
+        </Card>
+        
+        <Card 
+          title="TOTAL CUSTOMERS" 
+          icon={<FaUsers size={20} />} 
+          iconBg="bg-blue-500"
+          hoverable
+        >
+          <div className="text-3xl font-bold text-blue-500 mt-2">{totalCustomers}</div>
+        </Card>
+        
+        <Card 
+          title="AVERAGE INVOICE VALUE" 
+          icon={<FaChartLine size={20} />} 
+          iconBg="bg-purple-500"
+          hoverable
+        >
+          <div className="text-3xl font-bold text-purple-500 mt-2">{formatCurrency(averageInvoiceValue)}</div>
+        </Card>
+      </div>
 
-          {/* === TOP SUMMARY CARDS === */}
-          <div className="summary-cards">
-            <div className="summary-card">
-              <h3>Total Stock</h3>
-              <p>{totalStock}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Categories</h3>
-              <p>{totalCategories}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Invoices</h3>
-              <p>{totalInvoices}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Invoice Amount (₹)</h3>
-              <p>{totalInvoiceAmount.toFixed(2)}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Customers</h3>
-              <p>{totalCustomers}</p>
-            </div>
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <Card title="Stock by Category" noPadding>
+          <div className="p-4 h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={barChartData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                  dataKey="category" 
+                  angle={-45} 
+                  textAnchor="end"
+                  height={70}
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis />
+                <Tooltip formatter={(value) => [`${value} units`, 'Quantity']} />
+                <Bar 
+                  dataKey="quantity" 
+                  fill={theme === 'dark' ? '#6366f1' : '#4338ca'} 
+                  name="Quantity" 
+                />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
+        </Card>
 
-          {/* === CHARTS ROW 1: Bar + Line === */}
-          <div className="dashboard-row">
-            {/* Bar Chart: Stock by Category */}
-            <div className="dashboard-panel chart-panel">
-              <h2>Stock by Category</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={barChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="category" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="quantity" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Line Chart: Invoices by Month */}
-            <div className="dashboard-panel chart-panel">
-              <h2>Invoices by Month</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={lineChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="total" stroke="#82ca9d" strokeWidth={3} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+        <Card title="Invoices by Month" noPadding>
+          <div className="p-4 h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={lineChartData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                  dataKey="month" 
+                  angle={-45} 
+                  textAnchor="end"
+                  height={70}
+                  tick={{ fontSize: 12 }}
+                />
+                <YAxis />
+                <Tooltip formatter={(value) => [formatCurrency(value), 'Amount']} />
+                <Line 
+                  type="monotone" 
+                  dataKey="total" 
+                  stroke="#ef4444" 
+                  strokeWidth={2} 
+                  name="Total" 
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
+        </Card>
+      </div>
 
-          {/* === CHARTS ROW 2: Pie + Radial Bar === */}
-          <div className="dashboard-row">
-            {/* Pie Chart: Top 5 Customers by Invoice Amount */}
-            <div className="dashboard-panel chart-panel">
-              <h2>Top 5 Customers</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    dataKey="total"
-                    nameKey="name"
-                    outerRadius={100}
-                    label
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell
-                        key={`pie-cell-${index}`}
-                        fill={pieColors[index % pieColors.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Radial Bar: Item Type Distribution */}
-            <div className="dashboard-panel chart-panel">
-              <h2>Item Type Distribution</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <RadialBarChart 
-                  cx="50%" 
-                  cy="50%" 
-                  innerRadius="10%" 
-                  outerRadius="80%" 
-                  data={radialData}
-                  startAngle={180} 
-                  endAngle={0}
+      {/* Third Row - Customer Pie Chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card title="Top 5 Customers by Sales" noPadding>
+          <div className="p-4 h-80 flex justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="total"
+                  nameKey="name"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 >
-                  <PolarAngleAxis 
-                    dataKey="value" 
-                    type="number" 
-                    domain={[0, Math.max(...radialData.map(d => d.value)) || 1]} 
-                    angleAxisId={0} 
-                    tick={false} // hide ticks if you want a cleaner look
-                  />
-                  <RadialBar 
-                    minAngle={15} 
-                    background 
-                    clockWise 
-                    dataKey="value" 
-                    fill="#ff7300" 
-                  />
-                  <Legend 
-                    iconSize={10} 
-                    layout="vertical" 
-                    verticalAlign="middle" 
-                    align="right" 
-                    formatter={(value, entry, i) => radialData[i]?.name} 
-                  />
-                  <Tooltip />
-                </RadialBarChart>
-              </ResponsiveContainer>
-            </div>
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value) => [formatCurrency(value), 'Sales']} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
+        </Card>
 
-          {/* === ROW: Recent Invoices & Customers === */}
-          <div className="dashboard-row">
-            <div className="dashboard-panel recent-invoices">
-              <h2>Recent Invoices</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Invoice #</th>
-                    <th>Date</th>
-                    <th>Customer</th>
-                    <th>Total (Subtotal)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentInvoices.length > 0 ? (
-                    recentInvoices.map(inv => {
-                      const invoiceSubtotal = inv.InvoiceItems?.reduce(
-                        (sum, it) => sum + (it.subtotal || 0),
-                        0
-                      ) || 0;
-                      return (
-                        <tr key={inv.id}>
-                          <td>{inv.invoiceNumber}</td>
-                          <td>{new Date(inv.invoiceDate).toLocaleDateString()}</td>
-                          <td>{inv.Customer ? inv.Customer.name : 'N/A'}</td>
-                          <td>₹{invoiceSubtotal.toFixed(2)}</td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td colSpan="4">No recent invoices found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="dashboard-panel recent-customers">
-              <h2>Recent Customers</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentCustomers.length > 0 ? (
-                    recentCustomers.map(cust => (
-                      <tr key={cust.id}>
-                        <td>{cust.name}</td>
-                        <td>{cust.address}</td>
-                        <td>₹{(cust.balance || 0).toFixed(2)}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="3">No recent customers found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* === ROW: Low-Stock, New Arrivals === */}
-          <div className="dashboard-row">
-            <div className="dashboard-panel low-stock-panel">
-              <h2>Low Stock Items</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Item Name</th>
-                    <th>Quantity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lowStockItems.length > 0 ? (
-                    lowStockItems.map(item => (
-                      <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>{item.quantity}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="2">No items found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="dashboard-panel new-stock-panel">
-              <h2>New Arrivals</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Item Name</th>
-                    <th>Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {newArrivals.length > 0 ? (
-                    newArrivals.map(item => (
-                      <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="2">No new items found.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
+        {/* You can add another chart or table here */}
       </div>
     </div>
   );

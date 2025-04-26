@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 // import TopNavbar from "../components/TopNavbar";
-import { FaUserFriends, FaEdit, FaTrash, FaTimes } from "react-icons/fa";
+import { FaUserFriends, FaEdit, FaTrash, FaTimes, FaSearch, FaEye, FaPlus } from "react-icons/fa";
 import "./css/Customers.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -291,66 +291,10 @@ function Customers() {
    */
   if (loading) {
     return (
-      <div className="ledgers-page-wrapper">
+      <div className="app-layout">
         <Sidebar />
-        <div className="ledgers-container">
-          {/* <TopNavbar /> */}
-          <div className="ledgers-content">
-            {/* Alerts Section */}
-            <div className="alerts-section">
-              {alerts.map((alert) => (
-                <Alert
-                  key={alert.id}
-                  type={alert.type}
-                  message={alert.message}
-                  onClose={() =>
-                    setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
-                  }
-                />
-              ))}
-            </div>
-            <div className="loading">Loading...</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="ledgers-page-wrapper">
-        <Sidebar />
-        <div className="ledgers-container">
-          {/* <TopNavbar /> */}
-          <div className="ledgers-content">
-            {/* Alerts Section */}
-            <div className="alerts-section">
-              {alerts.map((alert) => (
-                <Alert
-                  key={alert.id}
-                  type={alert.type}
-                  message={alert.message}
-                  onClose={() =>
-                    setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
-                  }
-                />
-              ))}
-            </div>
-            <div className="error">{error}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="ledgers-page-wrapper">
-      <Sidebar />
-      <div className="ledgers-container">
-        {/* <TopNavbar /> */}
-        <div className="ledgers-content">
-          {/* Alerts Section */}
-          <div className="alerts-section">
+        <div className="main-content">
+          <div className="alerts-container">
             {alerts.map((alert) => (
               <Alert
                 key={alert.id}
@@ -362,133 +306,244 @@ function Customers() {
               />
             ))}
           </div>
-
-          {/* Summary Cards */}
-          <div className="summary-cards">
-            <div className="summary-card">
-              <h3>Total Customers</h3>
-              <p>{customers.length}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Balance</h3>
-              <p>₹{totalBalance.toFixed(2)}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Invoices</h3>
-              <p>{totalInvoices}</p>
-            </div>
-            <div className="summary-card">
-              <h3>Total Transactions</h3>
-              <p>{totalTransactions}</p>
-            </div>
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading customers data...</p>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          {/* Title + Add Button */}
-          <div className="top-actions">
-            <h1 className="page-title">Manage Customers</h1>
-            <button className="btn-add-new" onClick={handleOpenAddModal}>
-              <FaUserFriends /> Add
+  if (error) {
+    return (
+      <div className="app-layout">
+        <Sidebar />
+        <div className="main-content">
+          <div className="alerts-container">
+            {alerts.map((alert) => (
+              <Alert
+                key={alert.id}
+                type={alert.type}
+                message={alert.message}
+                onClose={() =>
+                  setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
+                }
+              />
+            ))}
+          </div>
+          <div className="error-container">
+            <div className="error-icon">!</div>
+            <h2>Error Loading Data</h2>
+            <p>{error}</p>
+            <button className="btn-retry" onClick={fetchAllData}>
+              Retry
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          {/* Single Live Search */}
-          <div className="single-search-section">
-            <label htmlFor="searchTerm">Search:</label>
+  return (
+    <div className="app-layout">
+      <Sidebar />
+      <div className="main-content">
+        {/* Alerts Section */}
+        <div className="alerts-container">
+          {alerts.map((alert) => (
+            <Alert
+              key={alert.id}
+              type={alert.type}
+              message={alert.message}
+              onClose={() =>
+                setAlerts((prev) => prev.filter((a) => a.id !== alert.id))
+              }
+            />
+          ))}
+        </div>
+
+        {/* Page Header */}
+        <div className="page-header">
+          <h1>Customers Management</h1>
+          <button className="btn-primary" onClick={handleOpenAddModal}>
+            <FaPlus /> Add New Customer
+          </button>
+        </div>
+
+        {/* Summary Cards */}
+        <div className="dashboard-cards">
+          <div className="dashboard-card">
+            <div className="card-icon customers-icon">
+              <FaUserFriends />
+            </div>
+            <div className="card-content">
+              <h3>Total Customers</h3>
+              <p className="card-value">{customers.length}</p>
+            </div>
+          </div>
+          
+          <div className="dashboard-card">
+            <div className="card-icon balance-icon">
+              <span>₹</span>
+            </div>
+            <div className="card-content">
+              <h3>Total Balance</h3>
+              <p className="card-value">₹{totalBalance.toFixed(2)}</p>
+            </div>
+          </div>
+          
+          <div className="dashboard-card">
+            <div className="card-icon invoices-icon">
+              <span>INV</span>
+            </div>
+            <div className="card-content">
+              <h3>Total Invoices</h3>
+              <p className="card-value">{totalInvoices}</p>
+            </div>
+          </div>
+          
+          <div className="dashboard-card">
+            <div className="card-icon transactions-icon">
+              <span>TX</span>
+            </div>
+            <div className="card-content">
+              <h3>Total Transactions</h3>
+              <p className="card-value">{totalTransactions}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Search Section */}
+        <div className="search-section">
+          <div className="search-container">
+            <FaSearch className="search-icon" />
             <input
               type="text"
-              id="searchTerm"
-              placeholder="Search by name, address, or phone..."
+              placeholder="Search customers by name, address, or phone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
             />
+            {searchTerm && (
+              <button 
+                className="search-clear" 
+                onClick={() => setSearchTerm("")}
+                aria-label="Clear search"
+              >
+                <FaTimes />
+              </button>
+            )}
           </div>
+        </div>
 
-          {/* Table Section */}
-          <div className="ledger-table-section">
-            <h2 className="section-title">Existing Customers</h2>
-            <div className="table-responsive">
-              <table className="ledger-table">
-                <thead>
-                  <tr>
-                    <th>S. No.</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Balance (₹)</th>
-                    <th>Total Invoices</th>
-                    <th>Total Transactions</th>
-                    <th>Actions</th>
+        {/* Customers Table */}
+        <div className="data-table-container">
+          <div className="table-header">
+            <h2>Customer List</h2>
+            <span className="table-count">{filteredCustomers.length} customers</span>
+          </div>
+          
+          <div className="table-responsive">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Balance</th>
+                  <th>Invoices</th>
+                  <th>Transactions</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCustomers.map((customer, index) => (
+                  <tr 
+                    key={customer.id} 
+                    onClick={(e) => {
+                      // Only navigate if the click was not on a button
+                      if (!e.target.closest('button')) {
+                        handleView(customer.id);
+                      }
+                    }}
+                    className="clickable-row"
+                  >
+                    <td>{index + 1}</td>
+                    <td className="customer-name">{customer.name}</td>
+                    <td className="customer-address">{customer.address || "-"}</td>
+                    <td>{customer.phone}</td>
+                    <td>{customer.email || "-"}</td>
+                    <td className={`balance ${parseFloat(customer.balance) > 0 ? 'positive' : parseFloat(customer.balance) < 0 ? 'negative' : ''}`}>
+                      ₹{(parseFloat(customer.balance) || 0).toFixed(2)}
+                    </td>
+                    <td>{parseInt(customer.totalInvoices) || 0}</td>
+                    <td>{parseInt(customer.totalTransactions) || 0}</td>
+                    <td className="actions-cell" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        className="btn-icon btn-view"
+                        onClick={() => handleView(customer.id)}
+                        title="View Details"
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        className="btn-icon btn-edit"
+                        onClick={() => handleOpenEditModal(customer)}
+                        title="Edit Customer"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="btn-icon btn-delete"
+                        onClick={() => handleDelete(customer.id)}
+                        title="Delete Customer"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {filteredCustomers.map((customer, index) => (
-                    <tr key={customer.id}>
-                      <td>{index + 1}</td>
-                      <td>{customer.name}</td>
-                      <td>{customer.address}</td>
-                      <td>{customer.phone}</td>
-                      <td>{customer.email || "-"}</td>
-                      <td>₹{(parseFloat(customer.balance) || 0).toFixed(2)}</td>
-                      <td>{parseInt(customer.totalInvoices) || 0}</td>
-                      <td>{parseInt(customer.totalTransactions) || 0}</td>
-                      <td className="actions-cell">
-                        <button
-                          className="btn-view"
-                          onClick={() => handleView(customer.id)}
-                        >
-                          View
-                        </button>
-                        <button
-                          className="btn-edit"
-                          onClick={() => handleOpenEditModal(customer)}
-                        >
-                          <FaEdit /> Edit
-                        </button>
-                        <button
-                          className="btn-delete"
-                          onClick={() => handleDelete(customer.id)}
-                        >
-                          <FaTrash /> Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {filteredCustomers.length === 0 && (
-                    <tr>
-                      <td colSpan="9" className="text-center text-muted">
-                        No customers found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                ))}
+                {filteredCustomers.length === 0 && (
+                  <tr className="empty-row">
+                    <td colSpan="9">
+                      <div className="empty-state">
+                        <FaUserFriends className="empty-icon" />
+                        <p>No customers found</p>
+                        {searchTerm && (
+                          <button 
+                            className="btn-secondary" 
+                            onClick={() => setSearchTerm("")}
+                          >
+                            Clear Search
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
 
         {/* Add / Edit Customer Modal */}
         {showCustomerModal && (
-          <div
-            className="modal-overlay"
-            onClick={handleCloseModal}
-            aria-modal="true"
-            role="dialog"
-          >
-            <div
-              className="modal-container"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                className="modal-close"
-                onClick={handleCloseModal}
-                aria-label="Close Modal"
-              >
-                <FaTimes />
-              </button>
-              <h2 className="modal-title">
-                {isEditMode ? "Edit Customer" : "Add New Customer"}
-              </h2>
+          <div className="modal-backdrop">
+            <div className="modal">
+              <div className="modal-header">
+                <h2>{isEditMode ? "Edit Customer" : "Add New Customer"}</h2>
+                <button 
+                  className="modal-close-btn" 
+                  onClick={handleCloseModal}
+                  aria-label="Close Modal"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+              
               <Formik
                 initialValues={{
                   name: isEditMode && selectedCustomer ? selectedCustomer.name : "",
@@ -503,95 +558,88 @@ function Customers() {
                 onSubmit={handleFormSubmit}
               >
                 {({ isSubmitting }) => (
-                  <Form className="customer-form">
-                    {/* Name Field */}
+                  <Form className="modal-form">
                     <div className="form-group">
-                      <label htmlFor="name">
-                        Name<span className="required">*</span>
-                      </label>
+                      <label htmlFor="name">Name <span className="required">*</span></label>
                       <Field
                         type="text"
                         id="name"
                         name="name"
-                        placeholder="Enter Name"
-                        className="form-input"
+                        placeholder="Enter customer name"
+                        className="form-control"
                       />
                       <ErrorMessage
                         name="name"
                         component="div"
-                        className="error-message"
+                        className="form-error"
                       />
                     </div>
 
-                    {/* Address Field */}
                     <div className="form-group">
                       <label htmlFor="address">Address</label>
                       <Field
                         as="textarea"
                         id="address"
                         name="address"
-                        placeholder="Enter Address"
-                        rows="2"
-                        className="form-input"
+                        placeholder="Enter customer address"
+                        className="form-control"
                       />
                       <ErrorMessage
                         name="address"
                         component="div"
-                        className="error-message"
+                        className="form-error"
                       />
                     </div>
 
-                    {/* Phone Number Field */}
                     <div className="form-group">
-                      <label htmlFor="phoneNumber">
-                        Phone Number<span className="required">*</span>
-                      </label>
+                      <label htmlFor="phoneNumber">Phone Number <span className="required">*</span></label>
                       <Field
                         type="text"
                         id="phoneNumber"
                         name="phoneNumber"
-                        placeholder="Enter Phone Number"
-                        className="form-input"
+                        placeholder="Enter 10-digit phone number"
+                        className="form-control"
                       />
                       <ErrorMessage
                         name="phoneNumber"
                         component="div"
-                        className="error-message"
+                        className="form-error"
                       />
                     </div>
 
-                    {/* Email Field */}
                     <div className="form-group">
                       <label htmlFor="email">Email</label>
                       <Field
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Enter Email"
-                        className="form-input"
+                        placeholder="Enter email address"
+                        className="form-control"
                       />
                       <ErrorMessage
                         name="email"
                         component="div"
-                        className="error-message"
+                        className="form-error"
                       />
                     </div>
 
-                    {/* Form Actions */}
-                    <div className="modal-actions">
+                    <div className="modal-footer">
                       <button
                         type="button"
-                        className="btn-cancel"
+                        className="btn-secondary"
                         onClick={handleCloseModal}
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="btn-confirm"
+                        className="btn-primary"
                         disabled={isSubmitting}
                       >
-                        {isEditMode ? "Update" : "Create"}
+                        {isSubmitting ? 
+                          'Processing...' : 
+                          (isEditMode ? 'Update Customer' : 'Create Customer')
+                        }
                       </button>
                     </div>
                   </Form>
