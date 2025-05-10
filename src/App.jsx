@@ -17,6 +17,7 @@ import InvoiceDetailedView from "./pages/InvoiceDetailedView";
 import EditInvoice from "./pages/EditInvoice";
 import TransactionEdit from "./pages/TransactionEdit";
 import AllTransactions from "./pages/AllTransactions";
+import Settings from "./pages/Settings";
 
 // Components
 import Sidebar from "./components/Sidebar";
@@ -25,9 +26,15 @@ import Sidebar from "./components/Sidebar";
 const AppLayout = ({ children }) => {
   const { theme } = useTheme();
   const location = useLocation();
-  
+
   return (
-    <div className={`flex h-screen overflow-hidden ${theme === 'dark' ? 'bg-neutral-900 text-white' : 'bg-neutral-50 text-neutral-900'}`}>
+    <div
+      className={`flex h-screen overflow-hidden ${
+        theme === "dark"
+          ? "bg-neutral-900 text-white"
+          : "bg-neutral-50 text-neutral-900"
+      }`}
+    >
       <Sidebar />
       <main className="flex-1 overflow-auto ml-[80px] lg:ml-[250px] transition-all duration-300 p-6">
         <AnimatePresence mode="wait">
@@ -59,7 +66,7 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <Home />
+              <Home />
             </AppLayout>
           </PrivateRoute>
         }
@@ -69,7 +76,7 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <Customers />
+              <Customers />
             </AppLayout>
           </PrivateRoute>
         }
@@ -79,7 +86,7 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <Stock />
+              <Stock />
             </AppLayout>
           </PrivateRoute>
         }
@@ -89,7 +96,7 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <Departments />
+              <Departments />
             </AppLayout>
           </PrivateRoute>
         }
@@ -99,7 +106,7 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <Categories />
+              <Categories />
             </AppLayout>
           </PrivateRoute>
         }
@@ -109,7 +116,7 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <CustomerDetails />
+              <CustomerDetails />
             </AppLayout>
           </PrivateRoute>
         }
@@ -119,42 +126,42 @@ function App() {
         element={
           <PrivateRoute>
             <AppLayout>
-            <Billing />
+              <Billing />
             </AppLayout>
           </PrivateRoute>
         }
       />
-      <Route 
-         path="/fullinvoice/:id" 
-         element={
-           <PrivateRoute>
-             <AppLayout>
-             <InvoiceDetailedView />
-             </AppLayout>
-           </PrivateRoute>
-         }
-       />
-      <Route 
-        path="/edit-invoice/:id" 
+      <Route
+        path="/fullinvoice/:id"
         element={
           <PrivateRoute>
             <AppLayout>
-            <EditInvoice />
+              <InvoiceDetailedView />
             </AppLayout>
           </PrivateRoute>
-        } 
+        }
       />
-      <Route 
-        path="/transaction/edit/:id" 
+      <Route
+        path="/edit-invoice/:id"
         element={
           <PrivateRoute>
             <AppLayout>
-            <TransactionEdit />
+              <EditInvoice />
             </AppLayout>
           </PrivateRoute>
-        } 
+        }
       />
-      <Route 
+      <Route
+        path="/transaction/edit/:id"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <TransactionEdit />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/all-trasactions"
         element={
           <PrivateRoute>
@@ -162,7 +169,17 @@ function App() {
               <AllTransactions />
             </AppLayout>
           </PrivateRoute>
-        } 
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <PrivateRoute>
+            <AppLayout>
+              <Settings />
+            </AppLayout>
+          </PrivateRoute>
+        }
       />
     </Routes>
   );
